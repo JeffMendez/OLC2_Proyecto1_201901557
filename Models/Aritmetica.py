@@ -11,21 +11,143 @@ class Aritmetica(Expresion):
     def execute(self, entorno):
         valorIzq = self.OpIzq.execute(None)
         valorDer = None
-
+        
+        # Operaciones unarias
         if self.OpDer:
             valorDer = self.OpDer.execute(None)
+            if valorDer.Valor == "ERROR":
+                return Retorno("ERROR", "Expresion") 
 
-        resultado = Retorno(0, "int")
+        # Error en operacion anterior
+        if valorIzq.Valor == "ERROR":
+            return Retorno("ERROR", "Expresion") 
 
+
+        resultado = Retorno(0, "")
+
+        # SUMA
         if self.Operacion == "+":
-            resultado.Valor = valorIzq.Valor + valorDer.Valor
+
+            try:
+                resultado.Valor = valorIzq.Valor + valorDer.Valor
+            except:
+                pass
+
+            if (valorIzq.Tipo != "Int64" and valorIzq.Tipo != "Float64") or (valorDer.Tipo != "Int64" and valorDer.Tipo != "Float64"):
+                resultado = Retorno("ERROR", "+")
+                print(f"Error: Suma invalida: {valorIzq.Tipo} con {valorDer.Tipo}")
+            else:
+                if valorIzq.Tipo == "Float64" or valorDer.Tipo == "Float64":
+                    resultado.Tipo = "Float64"
+                else:
+                    resultado.Tipo = "Int64"
+
+        # RESTA
         elif self.Operacion == "-":
-            resultado.Valor = valorIzq.Valor - valorDer.Valor
+    
+            try:
+                resultado.Valor = valorIzq.Valor - valorDer.Valor
+            except:
+                pass
+
+            if (valorIzq.Tipo != "Int64" and valorIzq.Tipo != "Float64") or (valorDer.Tipo != "Int64" and valorDer.Tipo != "Float64"):
+                resultado = Retorno("ERROR", "+")
+                print(f"Error: Resta invalida: {valorIzq.Tipo} con {valorDer.Tipo}")
+            else:
+                if valorIzq.Tipo == "Float64" or valorDer.Tipo == "Float64":
+                    resultado.Tipo = "Float64"
+                else:
+                    resultado.Tipo = "Int64"
+
+        # MULTIPLICACION
         elif self.Operacion == "*":
-            resultado.Valor = valorIzq.Valor * valorDer.Valor
+
+            # Para string
+            if valorIzq.Tipo == "String" and valorDer.Tipo == "String":
+                resultado.Valor = valorIzq.Valor + valorDer.Valor
+                resultado.Tipo = "String"
+            else:
+                # Para numeros
+                try:
+                    resultado.Valor = valorIzq.Valor * valorDer.Valor
+                except:
+                    pass
+
+                if (valorIzq.Tipo != "Int64" and valorIzq.Tipo != "Float64") or (valorDer.Tipo != "Int64" and valorDer.Tipo != "Float64"):
+                    resultado = Retorno("ERROR", "+")
+                    print(f"Error: Multiplicacion invalida: {valorIzq.Tipo} con {valorDer.Tipo}")
+                else:
+                    if valorIzq.Tipo == "Float64" or valorDer.Tipo == "Float64":
+                        resultado.Tipo = "Float64"
+                    else:
+                        resultado.Tipo = "Int64"
+
+        # DIVISION
         elif self.Operacion == "/":
-            resultado.Valor = valorIzq.Valor / valorDer.Valor
+
+            try:
+                resultado.Valor = valorIzq.Valor / valorDer.Valor
+                resultado.Tipo = "Float64"
+            except:
+                pass
+
+            if (valorIzq.Tipo != "Int64" and valorIzq.Tipo != "Float64") or (valorDer.Tipo != "Int64" and valorDer.Tipo != "Float64"):
+                resultado = Retorno("ERROR", "+")
+                print(f"Error: Division invalida: {valorIzq.Tipo} con {valorDer.Tipo}")
+
+        # UMENOS
         elif self.Operacion == "umenos":
-            resultado.Valor = valorIzq.Valor * -1
+
+            try:
+                resultado.Valor = valorIzq.Valor * -1
+                resultado.Tipo = valorIzq.Tipo
+            except:
+                pass
+
+            if valorIzq.Tipo != "Int64" and valorIzq.Tipo != "Float64":
+                resultado = Retorno("ERROR", "+")
+                print(f"Error: UMenos invalido: con {valorIzq.Tipo}")
+
+        # POTENCIA
+        elif self.Operacion == "^":
+            
+            # Para string
+            if valorIzq.Tipo == "String" and valorDer.Tipo == "Int64":
+                resultado.Valor = ""
+                resultado.Tipo = "String"
+                for x in range(int(valorDer.Valor)):
+                    resultado.Valor += valorIzq.Valor
+            else:
+                # Para numeros
+                try:
+                    resultado.Valor = valorIzq.Valor ** valorDer.Valor
+                except:
+                    pass
+
+                if (valorIzq.Tipo != "Int64" and valorIzq.Tipo != "Float64") or (valorDer.Tipo != "Int64" and valorDer.Tipo != "Float64"):
+                    resultado = Retorno("ERROR", "+")
+                    print(f"Error: Potencia invalida: {valorIzq.Tipo} con {valorDer.Tipo}")
+                else:
+                    if valorIzq.Tipo == "Float64" or valorDer.Tipo == "Float64":
+                        resultado.Tipo = "Float64"
+                    else:
+                        resultado.Tipo = "Int64"
+
+        # MODULO
+        elif self.Operacion == "%":
+
+            try:
+                resultado.Valor = valorIzq.Valor % valorDer.Valor
+            except:
+                pass
+
+            if (valorIzq.Tipo != "Int64" and valorIzq.Tipo != "Float64") or (valorDer.Tipo != "Int64" and valorDer.Tipo != "Float64"):
+                resultado = Retorno("ERROR", "+")
+                print(f"Error: Modulo invalido: {valorIzq.Tipo} con {valorDer.Tipo}")
+            else:
+                if valorIzq.Tipo == "Float64" or valorDer.Tipo == "Float64":
+                    resultado.Tipo = "Float64"
+                else:
+                    resultado.Tipo = "Int64"
 
         return resultado
