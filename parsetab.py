@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'leftMASMENOSleftPORDIVIDIDOleftPOTENCIAleftMODULOrightUMENOSCHAR CORDER CORIZQ DECIMAL DIVIDIDO ENTERO FALSE ID MAS MENOS MODULO NOTHING PARDER PARIZQ POR POTENCIA PTCOMA REVALUAR STRING TRUEstart : instruccionesinstrucciones    : instrucciones instruccion \n                        | instruccion instruccion : REVALUAR CORIZQ expresion CORDER PTCOMAexpresion    : expresion MAS expresion\n                    | expresion MENOS expresion\n                    | expresion POR expresion\n                    | expresion DIVIDIDO expresion\n                    | expresion POTENCIA expresion\n                    | expresion MODULO expresionexpresion : MENOS expresion %prec UMENOSexpresion : PARIZQ expresion PARDERexpresion    : ENTERO\n                    | DECIMAL\n                    | STRING\n                    | CHAR\n                    | TRUE\n                    | FALSE\n                    | NOTHING\n                    | ID'
+_lr_signature = 'leftORleftANDleftIGUALDADDISTINTOleftMAYORMENORMAYIGUALMENIGUALleftMASMENOSleftPORDIVIDIDOleftPOTENCIAleftMODULOrightNOTrightUMENOSAND CHAR CORDER CORIZQ DECIMAL DISTINTO DIVIDIDO ENTERO FALSE ID IGUALDAD MAS MAYIGUAL MAYOR MENIGUAL MENOR MENOS MODULO NOT NOTHING OR PARDER PARIZQ POR POTENCIA PTCOMA REVALUAR STRING TRUEstart : instruccionesinstrucciones    : instrucciones instruccion \n                        | instruccion instruccion : REVALUAR CORIZQ expresion CORDER PTCOMAexpresion    : expresion MAS expresion\n                    | expresion MENOS expresion\n                    | expresion POR expresion\n                    | expresion DIVIDIDO expresion\n                    | expresion POTENCIA expresion\n                    | expresion MODULO expresion\n                    \n                    | expresion MAYOR expresion\n                    | expresion MENOR expresion\n                    | expresion MAYIGUAL expresion\n                    | expresion MENIGUAL expresion\n                    | expresion IGUALDAD expresion\n                    | expresion DISTINTO expresion\n                    \n                    | expresion AND expresion\n                    | expresion OR expresionexpresion    : MENOS expresion %prec UMENOS\n                    | NOT expresion %prec UMENOSexpresion : PARIZQ expresion PARDERexpresion    : ENTERO\n                    | DECIMAL\n                    | STRING\n                    | CHAR\n                    | TRUE\n                    | FALSE\n                    | NOTHING\n                    | ID'
     
-_lr_action_items = {'REVALUAR':([0,2,3,5,27,],[4,4,-3,-2,-4,]),'$end':([1,2,3,5,27,],[0,-1,-3,-2,-4,]),'CORIZQ':([4,],[6,]),'MENOS':([6,7,8,9,10,11,12,13,14,15,16,17,19,20,21,22,23,24,25,26,28,29,30,31,32,33,34,],[8,20,8,8,-13,-14,-15,-16,-17,-18,-19,-20,8,8,8,8,8,8,-11,20,-5,-6,-7,-8,-9,-10,-12,]),'PARIZQ':([6,8,9,19,20,21,22,23,24,],[9,9,9,9,9,9,9,9,9,]),'ENTERO':([6,8,9,19,20,21,22,23,24,],[10,10,10,10,10,10,10,10,10,]),'DECIMAL':([6,8,9,19,20,21,22,23,24,],[11,11,11,11,11,11,11,11,11,]),'STRING':([6,8,9,19,20,21,22,23,24,],[12,12,12,12,12,12,12,12,12,]),'CHAR':([6,8,9,19,20,21,22,23,24,],[13,13,13,13,13,13,13,13,13,]),'TRUE':([6,8,9,19,20,21,22,23,24,],[14,14,14,14,14,14,14,14,14,]),'FALSE':([6,8,9,19,20,21,22,23,24,],[15,15,15,15,15,15,15,15,15,]),'NOTHING':([6,8,9,19,20,21,22,23,24,],[16,16,16,16,16,16,16,16,16,]),'ID':([6,8,9,19,20,21,22,23,24,],[17,17,17,17,17,17,17,17,17,]),'CORDER':([7,10,11,12,13,14,15,16,17,25,28,29,30,31,32,33,34,],[18,-13,-14,-15,-16,-17,-18,-19,-20,-11,-5,-6,-7,-8,-9,-10,-12,]),'MAS':([7,10,11,12,13,14,15,16,17,25,26,28,29,30,31,32,33,34,],[19,-13,-14,-15,-16,-17,-18,-19,-20,-11,19,-5,-6,-7,-8,-9,-10,-12,]),'POR':([7,10,11,12,13,14,15,16,17,25,26,28,29,30,31,32,33,34,],[21,-13,-14,-15,-16,-17,-18,-19,-20,-11,21,21,21,-7,-8,-9,-10,-12,]),'DIVIDIDO':([7,10,11,12,13,14,15,16,17,25,26,28,29,30,31,32,33,34,],[22,-13,-14,-15,-16,-17,-18,-19,-20,-11,22,22,22,-7,-8,-9,-10,-12,]),'POTENCIA':([7,10,11,12,13,14,15,16,17,25,26,28,29,30,31,32,33,34,],[23,-13,-14,-15,-16,-17,-18,-19,-20,-11,23,23,23,23,23,-9,-10,-12,]),'MODULO':([7,10,11,12,13,14,15,16,17,25,26,28,29,30,31,32,33,34,],[24,-13,-14,-15,-16,-17,-18,-19,-20,-11,24,24,24,24,24,24,-10,-12,]),'PARDER':([10,11,12,13,14,15,16,17,25,26,28,29,30,31,32,33,34,],[-13,-14,-15,-16,-17,-18,-19,-20,-11,34,-5,-6,-7,-8,-9,-10,-12,]),'PTCOMA':([18,],[27,]),}
+_lr_action_items = {'REVALUAR':([0,2,3,5,37,],[4,4,-3,-2,-4,]),'$end':([1,2,3,5,37,],[0,-1,-3,-2,-4,]),'CORIZQ':([4,],[6,]),'MENOS':([6,7,8,9,10,11,12,13,14,15,16,17,18,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,],[8,21,8,8,8,-22,-23,-24,-25,-26,-27,-28,-29,8,8,8,8,8,8,8,8,8,8,8,8,8,8,-19,-20,21,-5,-6,-7,-8,-9,-10,21,21,21,21,21,21,21,21,-21,]),'NOT':([6,8,9,10,20,21,22,23,24,25,26,27,28,29,30,31,32,33,],[9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,]),'PARIZQ':([6,8,9,10,20,21,22,23,24,25,26,27,28,29,30,31,32,33,],[10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,]),'ENTERO':([6,8,9,10,20,21,22,23,24,25,26,27,28,29,30,31,32,33,],[11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,]),'DECIMAL':([6,8,9,10,20,21,22,23,24,25,26,27,28,29,30,31,32,33,],[12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,]),'STRING':([6,8,9,10,20,21,22,23,24,25,26,27,28,29,30,31,32,33,],[13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,]),'CHAR':([6,8,9,10,20,21,22,23,24,25,26,27,28,29,30,31,32,33,],[14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,]),'TRUE':([6,8,9,10,20,21,22,23,24,25,26,27,28,29,30,31,32,33,],[15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,]),'FALSE':([6,8,9,10,20,21,22,23,24,25,26,27,28,29,30,31,32,33,],[16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,]),'NOTHING':([6,8,9,10,20,21,22,23,24,25,26,27,28,29,30,31,32,33,],[17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,]),'ID':([6,8,9,10,20,21,22,23,24,25,26,27,28,29,30,31,32,33,],[18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,]),'CORDER':([7,11,12,13,14,15,16,17,18,34,35,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,],[19,-22,-23,-24,-25,-26,-27,-28,-29,-19,-20,-5,-6,-7,-8,-9,-10,-11,-12,-13,-14,-15,-16,-17,-18,-21,]),'MAS':([7,11,12,13,14,15,16,17,18,34,35,36,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,],[20,-22,-23,-24,-25,-26,-27,-28,-29,-19,-20,20,-5,-6,-7,-8,-9,-10,20,20,20,20,20,20,20,20,-21,]),'POR':([7,11,12,13,14,15,16,17,18,34,35,36,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,],[22,-22,-23,-24,-25,-26,-27,-28,-29,-19,-20,22,22,22,-7,-8,-9,-10,22,22,22,22,22,22,22,22,-21,]),'DIVIDIDO':([7,11,12,13,14,15,16,17,18,34,35,36,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,],[23,-22,-23,-24,-25,-26,-27,-28,-29,-19,-20,23,23,23,-7,-8,-9,-10,23,23,23,23,23,23,23,23,-21,]),'POTENCIA':([7,11,12,13,14,15,16,17,18,34,35,36,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,],[24,-22,-23,-24,-25,-26,-27,-28,-29,-19,-20,24,24,24,24,24,-9,-10,24,24,24,24,24,24,24,24,-21,]),'MODULO':([7,11,12,13,14,15,16,17,18,34,35,36,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,],[25,-22,-23,-24,-25,-26,-27,-28,-29,-19,-20,25,25,25,25,25,25,-10,25,25,25,25,25,25,25,25,-21,]),'MAYOR':([7,11,12,13,14,15,16,17,18,34,35,36,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,],[26,-22,-23,-24,-25,-26,-27,-28,-29,-19,-20,26,-5,-6,-7,-8,-9,-10,-11,-12,-13,-14,26,26,26,26,-21,]),'MENOR':([7,11,12,13,14,15,16,17,18,34,35,36,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,],[27,-22,-23,-24,-25,-26,-27,-28,-29,-19,-20,27,-5,-6,-7,-8,-9,-10,-11,-12,-13,-14,27,27,27,27,-21,]),'MAYIGUAL':([7,11,12,13,14,15,16,17,18,34,35,36,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,],[28,-22,-23,-24,-25,-26,-27,-28,-29,-19,-20,28,-5,-6,-7,-8,-9,-10,-11,-12,-13,-14,28,28,28,28,-21,]),'MENIGUAL':([7,11,12,13,14,15,16,17,18,34,35,36,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,],[29,-22,-23,-24,-25,-26,-27,-28,-29,-19,-20,29,-5,-6,-7,-8,-9,-10,-11,-12,-13,-14,29,29,29,29,-21,]),'IGUALDAD':([7,11,12,13,14,15,16,17,18,34,35,36,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,],[30,-22,-23,-24,-25,-26,-27,-28,-29,-19,-20,30,-5,-6,-7,-8,-9,-10,-11,-12,-13,-14,-15,-16,30,30,-21,]),'DISTINTO':([7,11,12,13,14,15,16,17,18,34,35,36,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,],[31,-22,-23,-24,-25,-26,-27,-28,-29,-19,-20,31,-5,-6,-7,-8,-9,-10,-11,-12,-13,-14,-15,-16,31,31,-21,]),'AND':([7,11,12,13,14,15,16,17,18,34,35,36,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,],[32,-22,-23,-24,-25,-26,-27,-28,-29,-19,-20,32,-5,-6,-7,-8,-9,-10,-11,-12,-13,-14,-15,-16,-17,32,-21,]),'OR':([7,11,12,13,14,15,16,17,18,34,35,36,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,],[33,-22,-23,-24,-25,-26,-27,-28,-29,-19,-20,33,-5,-6,-7,-8,-9,-10,-11,-12,-13,-14,-15,-16,-17,-18,-21,]),'PARDER':([11,12,13,14,15,16,17,18,34,35,36,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,],[-22,-23,-24,-25,-26,-27,-28,-29,-19,-20,52,-5,-6,-7,-8,-9,-10,-11,-12,-13,-14,-15,-16,-17,-18,-21,]),'PTCOMA':([19,],[37,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'start':([0,],[1,]),'instrucciones':([0,],[2,]),'instruccion':([0,2,],[3,5,]),'expresion':([6,8,9,19,20,21,22,23,24,],[7,25,26,28,29,30,31,32,33,]),}
+_lr_goto_items = {'start':([0,],[1,]),'instrucciones':([0,],[2,]),'instruccion':([0,2,],[3,5,]),'expresion':([6,8,9,10,20,21,22,23,24,25,26,27,28,29,30,31,32,33,],[7,34,35,36,38,39,40,41,42,43,44,45,46,47,48,49,50,51,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,24 +27,33 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> start","S'",1,None,None,None),
-  ('start -> instrucciones','start',1,'p_inicio','gramatica.py',116),
-  ('instrucciones -> instrucciones instruccion','instrucciones',2,'p_instrucciones','gramatica.py',121),
-  ('instrucciones -> instruccion','instrucciones',1,'p_instrucciones','gramatica.py',122),
-  ('instruccion -> REVALUAR CORIZQ expresion CORDER PTCOMA','instruccion',5,'p_instruccion','gramatica.py',130),
-  ('expresion -> expresion MAS expresion','expresion',3,'p_expresion_binaria','gramatica.py',134),
-  ('expresion -> expresion MENOS expresion','expresion',3,'p_expresion_binaria','gramatica.py',135),
-  ('expresion -> expresion POR expresion','expresion',3,'p_expresion_binaria','gramatica.py',136),
-  ('expresion -> expresion DIVIDIDO expresion','expresion',3,'p_expresion_binaria','gramatica.py',137),
-  ('expresion -> expresion POTENCIA expresion','expresion',3,'p_expresion_binaria','gramatica.py',138),
-  ('expresion -> expresion MODULO expresion','expresion',3,'p_expresion_binaria','gramatica.py',139),
-  ('expresion -> MENOS expresion','expresion',2,'p_expresion_unaria','gramatica.py',155),
-  ('expresion -> PARIZQ expresion PARDER','expresion',3,'p_expresion_agrupacion','gramatica.py',159),
-  ('expresion -> ENTERO','expresion',1,'p_expresion_basica','gramatica.py',163),
-  ('expresion -> DECIMAL','expresion',1,'p_expresion_basica','gramatica.py',164),
-  ('expresion -> STRING','expresion',1,'p_expresion_basica','gramatica.py',165),
-  ('expresion -> CHAR','expresion',1,'p_expresion_basica','gramatica.py',166),
-  ('expresion -> TRUE','expresion',1,'p_expresion_basica','gramatica.py',167),
-  ('expresion -> FALSE','expresion',1,'p_expresion_basica','gramatica.py',168),
-  ('expresion -> NOTHING','expresion',1,'p_expresion_basica','gramatica.py',169),
-  ('expresion -> ID','expresion',1,'p_expresion_basica','gramatica.py',170),
+  ('start -> instrucciones','start',1,'p_inicio','gramatica.py',148),
+  ('instrucciones -> instrucciones instruccion','instrucciones',2,'p_instrucciones','gramatica.py',153),
+  ('instrucciones -> instruccion','instrucciones',1,'p_instrucciones','gramatica.py',154),
+  ('instruccion -> REVALUAR CORIZQ expresion CORDER PTCOMA','instruccion',5,'p_instruccion','gramatica.py',162),
+  ('expresion -> expresion MAS expresion','expresion',3,'p_expresion_binaria','gramatica.py',166),
+  ('expresion -> expresion MENOS expresion','expresion',3,'p_expresion_binaria','gramatica.py',167),
+  ('expresion -> expresion POR expresion','expresion',3,'p_expresion_binaria','gramatica.py',168),
+  ('expresion -> expresion DIVIDIDO expresion','expresion',3,'p_expresion_binaria','gramatica.py',169),
+  ('expresion -> expresion POTENCIA expresion','expresion',3,'p_expresion_binaria','gramatica.py',170),
+  ('expresion -> expresion MODULO expresion','expresion',3,'p_expresion_binaria','gramatica.py',171),
+  ('expresion -> expresion MAYOR expresion','expresion',3,'p_expresion_binaria','gramatica.py',173),
+  ('expresion -> expresion MENOR expresion','expresion',3,'p_expresion_binaria','gramatica.py',174),
+  ('expresion -> expresion MAYIGUAL expresion','expresion',3,'p_expresion_binaria','gramatica.py',175),
+  ('expresion -> expresion MENIGUAL expresion','expresion',3,'p_expresion_binaria','gramatica.py',176),
+  ('expresion -> expresion IGUALDAD expresion','expresion',3,'p_expresion_binaria','gramatica.py',177),
+  ('expresion -> expresion DISTINTO expresion','expresion',3,'p_expresion_binaria','gramatica.py',178),
+  ('expresion -> expresion AND expresion','expresion',3,'p_expresion_binaria','gramatica.py',180),
+  ('expresion -> expresion OR expresion','expresion',3,'p_expresion_binaria','gramatica.py',181),
+  ('expresion -> MENOS expresion','expresion',2,'p_expresion_unaria','gramatica.py',216),
+  ('expresion -> NOT expresion','expresion',2,'p_expresion_unaria','gramatica.py',217),
+  ('expresion -> PARIZQ expresion PARDER','expresion',3,'p_expresion_agrupacion','gramatica.py',225),
+  ('expresion -> ENTERO','expresion',1,'p_expresion_basica','gramatica.py',229),
+  ('expresion -> DECIMAL','expresion',1,'p_expresion_basica','gramatica.py',230),
+  ('expresion -> STRING','expresion',1,'p_expresion_basica','gramatica.py',231),
+  ('expresion -> CHAR','expresion',1,'p_expresion_basica','gramatica.py',232),
+  ('expresion -> TRUE','expresion',1,'p_expresion_basica','gramatica.py',233),
+  ('expresion -> FALSE','expresion',1,'p_expresion_basica','gramatica.py',234),
+  ('expresion -> NOTHING','expresion',1,'p_expresion_basica','gramatica.py',235),
+  ('expresion -> ID','expresion',1,'p_expresion_basica','gramatica.py',236),
 ]

@@ -1,4 +1,7 @@
 from Models.Aritmetica import *
+from Models.Relacional import *
+from Models.Logico import *
+
 from Models.Simbolo import *
 
 rw = {
@@ -16,12 +19,24 @@ tokens  = [
     'PARDER',
     'CORIZQ',
     'CORDER',
+
     'MAS',
     'MENOS',
     'POR',
     'DIVIDIDO',
     'POTENCIA',
     'MODULO',
+
+    'MAYOR',
+    'MENOR',
+    'MAYIGUAL',
+    'MENIGUAL',
+    'IGUALDAD',
+    'DISTINTO',
+
+    'OR',
+    'AND',
+    'NOT',
 
     'DECIMAL',
     'ENTERO',
@@ -37,12 +52,25 @@ t_PARIZQ    = r'\('
 t_PARDER    = r'\)'
 t_CORIZQ    = r'\['
 t_CORDER    = r'\]'
+
 t_MAS       = r'\+'
 t_MENOS     = r'-'
 t_POR       = r'\*'
 t_DIVIDIDO  = r'/'
 t_POTENCIA  = r'\^'
 t_MODULO    = r'%'
+
+t_MAYOR     = r'>'
+t_MENOR     = r'<'
+t_MAYIGUAL  = r'>='
+t_MENIGUAL  = r'<='
+t_IGUALDAD  = r'=='
+t_DISTINTO  = r'!='
+
+t_OR        = r'\|\|'
+t_AND       = r'&&'
+t_NOT       = r'!'
+
 t_PTCOMA    = r';'
 
 def t_ID(t):
@@ -104,10 +132,15 @@ lexer = lex.lex()
 
 # Asociación de operadores y precedencia
 precedence = (
+    ('left','OR'),
+    ('left','AND'),
+    ('left','IGUALDAD','DISTINTO'),
+    ('left','MAYOR','MENOR','MAYIGUAL','MENIGUAL'),
     ('left','MAS','MENOS'),
     ('left','POR','DIVIDIDO'),
     ('left','POTENCIA'),
     ('left','MODULO'),
+    ('right','NOT'),
     ('right','UMENOS'),
 )
 
@@ -136,8 +169,18 @@ def p_expresion_binaria(t):
                     | expresion POR expresion
                     | expresion DIVIDIDO expresion
                     | expresion POTENCIA expresion
-                    | expresion MODULO expresion'''
-                
+                    | expresion MODULO expresion
+                    
+                    | expresion MAYOR expresion
+                    | expresion MENOR expresion
+                    | expresion MAYIGUAL expresion
+                    | expresion MENIGUAL expresion
+                    | expresion IGUALDAD expresion
+                    | expresion DISTINTO expresion
+                    
+                    | expresion AND expresion
+                    | expresion OR expresion'''
+        
     if t[2] == '+'  : 
         t[0] = Aritmetica(t[1], t[3], "+")
     elif t[2] == '-':
@@ -150,10 +193,33 @@ def p_expresion_binaria(t):
         t[0] = Aritmetica(t[1], t[3], "^")
     elif t[2] == '%': 
         t[0] = Aritmetica(t[1], t[3], "%")
+    
+    elif t[2] == '>': 
+        t[0] = Relacional(t[1], t[3], ">")
+    elif t[2] == '<': 
+        t[0] = Relacional(t[1], t[3], "<")
+    elif t[2] == '>=': 
+        t[0] = Relacional(t[1], t[3], ">=")
+    elif t[2] == '<=': 
+        t[0] = Relacional(t[1], t[3], "<=")
+    elif t[2] == '==': 
+        t[0] = Relacional(t[1], t[3], "==")
+    elif t[2] == '!=': 
+        t[0] = Relacional(t[1], t[3], "!=")
+    
+    elif t[2] == '&&': 
+        t[0] = Logico(t[1], t[3], "and")
+    elif t[2] == '||': 
+        t[0] = Logico(t[1], t[3], "or")
 
 def p_expresion_unaria(t):
-    'expresion : MENOS expresion %prec UMENOS'
-    t[0] = Aritmetica(t[2], None, "umenos")
+    '''expresion    : MENOS expresion %prec UMENOS
+                    | NOT expresion %prec UMENOS'''
+
+    if t[1] == "-":
+        t[0] = Aritmetica(t[2], None, "umenos")
+    else:
+        t[0] = Logico(t[2], None, "not")
 
 def p_expresion_agrupacion(t):
     'expresion : PARIZQ expresion PARDER'
@@ -181,11 +247,11 @@ def p_expresion_basica(t):
     elif isinstance(t[1], str):
         value = str(t[1])
         if "true" in value:
-            t[0] = Simbolo(t[1], "Bool", None)
+            t[0] = Simbolo(True, "Bool", None)
         elif "false" in value:
-            t[0] = Simbolo(t[1], "Bool", None)
+            t[0] = Simbolo(False, "Bool", None)
         elif "nothing" in value:
-            t[0] = Simbolo(t[1], "Nulo", None) 
+            t[0] = Simbolo(None, "Nulo", None) 
             
 def p_error(t):
     print("Error sintáctico en '%s'" % t.value)
