@@ -205,45 +205,45 @@ def p_expresion_binaria(t):
                     | expresion AND expresion
                     | expresion OR expresion'''
         
-    if t[2] == '+'  : 
-        t[0] = Aritmetica(t[1], t[3], "+")
+    if t[2] == '+': 
+        t[0] = Aritmetica(t[1], t[3], "+", t.lineno(2), t.lexpos(2))
     elif t[2] == '-':
-        t[0] = Aritmetica(t[1], t[3], "-")
+        t[0] = Aritmetica(t[1], t[3], "-", t.lineno(2), t.lexpos(2))
     elif t[2] == '*': 
-        t[0] = Aritmetica(t[1], t[3], "*")
+        t[0] = Aritmetica(t[1], t[3], "*", t.lineno(2), t.lexpos(2))
     elif t[2] == '/': 
-        t[0] = Aritmetica(t[1], t[3], "/")
+        t[0] = Aritmetica(t[1], t[3], "/", t.lineno(2), t.lexpos(2))
     elif t[2] == '^': 
-        t[0] = Aritmetica(t[1], t[3], "^")
+        t[0] = Aritmetica(t[1], t[3], "^", t.lineno(2), t.lexpos(2))
     elif t[2] == '%': 
-        t[0] = Aritmetica(t[1], t[3], "%")
+        t[0] = Aritmetica(t[1], t[3], "%", t.lineno(2), t.lexpos(2))
     
     elif t[2] == '>': 
-        t[0] = Relacional(t[1], t[3], ">")
+        t[0] = Relacional(t[1], t[3], ">", t.lineno(2), t.lexpos(2))
     elif t[2] == '<': 
-        t[0] = Relacional(t[1], t[3], "<")
+        t[0] = Relacional(t[1], t[3], "<", t.lineno(2), t.lexpos(2))
     elif t[2] == '>=': 
-        t[0] = Relacional(t[1], t[3], ">=")
+        t[0] = Relacional(t[1], t[3], ">=", t.lineno(2), t.lexpos(2))
     elif t[2] == '<=': 
-        t[0] = Relacional(t[1], t[3], "<=")
+        t[0] = Relacional(t[1], t[3], "<=", t.lineno(2), t.lexpos(2))
     elif t[2] == '==': 
-        t[0] = Relacional(t[1], t[3], "==")
+        t[0] = Relacional(t[1], t[3], "==", t.lineno(2), t.lexpos(2))
     elif t[2] == '!=': 
-        t[0] = Relacional(t[1], t[3], "!=")
+        t[0] = Relacional(t[1], t[3], "!=", t.lineno(2), t.lexpos(2))
     
     elif t[2] == '&&': 
-        t[0] = Logico(t[1], t[3], "and")
+        t[0] = Logico(t[1], t[3], "and", t.lineno(2), t.lexpos(2))
     elif t[2] == '||': 
-        t[0] = Logico(t[1], t[3], "or")
+        t[0] = Logico(t[1], t[3], "or", t.lineno(2), t.lexpos(2))
 
 def p_expresion_unaria(t):
     '''expresion    : MENOS expresion %prec UMENOS
                     | NOT expresion %prec UMENOS'''
 
     if t[1] == "-":
-        t[0] = Aritmetica(t[2], None, "umenos")
+        t[0] = Aritmetica(t[2], None, "umenos", t.lineno(1), t.lexpos(1))
     else:
-        t[0] = Logico(t[2], None, "not")
+        t[0] = Logico(t[2], None, "not", t.lineno(1), t.lexpos(1))
 
 def p_expresion_agrupacion(t):
     'expresion : PARIZQ expresion PARDER'

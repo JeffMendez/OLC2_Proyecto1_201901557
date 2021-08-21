@@ -1,6 +1,6 @@
 print(7>4.6 && 3>=3, "-" ,3+3);
 print("Test");
-println("Asies");
+println("Asies" + 2);
 print("Como");
 print("Manzana");
 println(5+3 || 4+5);

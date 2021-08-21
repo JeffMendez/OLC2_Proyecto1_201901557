@@ -9,19 +9,24 @@ class Print(Expresion):
     def execute(self, entorno):
 
         salida = ""
+        error = False
 
         for exp in self.Expresiones:
-            valorExp = exp.execute(None) 
-            salida += str(valorExp.Valor) + " "
+            valorExp = exp.execute(None)
 
-        if self.Tipo == "nl": 
-            # Nueva linea
-            #print(salida, end="")
-            print("")
-            print(salida)  
-        else:
-            # Misma linea
-            #print(salida)    
-            print(salida, end="")
+            if valorExp.Valor == "ERROR":
+                error = True
+                break
+            else: 
+                salida += str(valorExp.Valor) + " "
+
+        if not error:
+            if self.Tipo == "nl": 
+                # Nueva linea
+                print("")
+                print(salida)  
+            else:
+                # Misma linea
+                print(salida, end="")
        
         

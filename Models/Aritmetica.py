@@ -3,10 +3,12 @@ from Abstractos.Retorno import *
 
 class Aritmetica(Expresion):
 
-    def __init__(self, opIzq, opDer, operacion):
+    def __init__(self, opIzq, opDer, operacion, fila, columna):
         self.OpIzq = opIzq
         self.OpDer = opDer
         self.Operacion = operacion
+        self.Fila = fila
+        self.Columna = columna
 
     def execute(self, entorno):
         valorIzq = self.OpIzq.execute(None)
@@ -35,7 +37,7 @@ class Aritmetica(Expresion):
 
             if (valorIzq.Tipo != "Int64" and valorIzq.Tipo != "Float64") or (valorDer.Tipo != "Int64" and valorDer.Tipo != "Float64"):
                 resultado = Retorno("ERROR", "+")
-                print(f"Error: Suma invalida: {valorIzq.Tipo} con {valorDer.Tipo}")
+                print(f"Error: Suma invalida: {valorIzq.Tipo} con {valorDer.Tipo} ({self.Fila}:{self.Columna})")
             else:
                 if valorIzq.Tipo == "Float64" or valorDer.Tipo == "Float64":
                     resultado.Tipo = "Float64"

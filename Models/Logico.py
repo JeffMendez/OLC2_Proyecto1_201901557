@@ -3,10 +3,12 @@ from Abstractos.Retorno import *
 
 class Logico(Expresion):
 
-    def __init__(self, opIzq, opDer, operacion):
+    def __init__(self, opIzq, opDer, operacion, fila, columna):
         self.OpIzq = opIzq
         self.OpDer = opDer
         self.Operacion = operacion
+        self.Fila = fila
+        self.Columna = columna
 
     def execute(self, entorno):
         valorIzq = self.OpIzq.execute(None)
