@@ -29,6 +29,14 @@ class Logico(Expresion):
 
             try:
                 resultado.Valor = valorIzq.Valor and valorDer.Valor
+
+                # Operacion que no resulta en boolean
+                if resultado.Valor != False and resultado.Valor != True:
+                    if resultado.Valor == valorIzq.Valor:
+                        resultado.Tipo = valorIzq.Tipo
+                    else:
+                        resultado.Tipo = valorDer.Tipo
+
             except:
                 resultado = Retorno("ERROR", "and")
                 print(f"Error: AND invalido: {valorIzq.Tipo} con {valorDer.Tipo}")
@@ -38,6 +46,14 @@ class Logico(Expresion):
 
             try:
                 resultado.Valor = valorIzq.Valor or valorDer.Valor
+
+                # Operacion que no resulta en boolean
+                if resultado.Valor != False and resultado.Valor != True:
+                    if resultado.Valor == valorIzq.Valor:
+                        resultado.Tipo = valorIzq.Tipo
+                    else:
+                        resultado.Tipo = valorDer.Tipo
+                        
             except:
                 resultado = Retorno("ERROR", "or")
                 print(f"Error: OR invalido: {valorIzq.Tipo} con {valorDer.Tipo}")

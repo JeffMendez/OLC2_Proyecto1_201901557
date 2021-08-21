@@ -6,8 +6,8 @@ try:
     for instruccion in ast:
         valor = instruccion.execute(None)
 
-        if valor.Valor != "ERROR":
-            print(f"Res: {valor.Valor} , tipo: {valor.Tipo}")
+        #if valor.Valor != "ERROR":
+        #    print(f"Res: {valor.Valor} , tipo: {valor.Tipo}")
             
 except Exception as e:
     print("Error al ejecutar")

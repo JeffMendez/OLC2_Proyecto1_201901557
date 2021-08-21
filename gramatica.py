@@ -4,12 +4,17 @@ from Models.Logico import *
 
 from Models.Simbolo import *
 
+from Models.Print import *
+
 rw = {
     "true": "TRUE",
     "false": "FALSE",
     "nothing": "NOTHING",
 
-    "Evaluar": "REVALUAR"
+    "Evaluar": "REVALUAR",
+
+    "println": "PRINTLN",
+    "print": "PRINT",
 }
 
 tokens  = [
@@ -43,7 +48,8 @@ tokens  = [
     'STRING',
     'CHAR',
 
-    'PTCOMA'
+    'PTCOMA',
+    'COMA',
 
 ] + list(rw.values())
 
@@ -72,6 +78,7 @@ t_AND       = r'&&'
 t_NOT       = r'!'
 
 t_PTCOMA    = r';'
+t_COMA      = r','
 
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
@@ -160,8 +167,25 @@ def p_instrucciones(t):
         t[0] = t[1]
 
 def p_instruccion(t):
-    'instruccion : REVALUAR CORIZQ expresion CORDER PTCOMA'
-    t[0] = t[3]
+    'instruccion  : printInst PTCOMA'
+    t[0] = t[1]
+
+def p_instruccion_print(t):
+    'printInst : PRINT PARIZQ paramExp PARDER'
+    t[0] = Print(t[3], "l")
+
+def p_instruccion_println(t):
+    'printInst : PRINTLN PARIZQ paramExp PARDER'
+    t[0] = Print(t[3], "nl")
+
+def p_param_expresion(t):
+    '''paramExp     : paramExp COMA expresion
+                    | expresion'''
+    if len(t) == 2:
+        t[0] = [t[1]]
+    else:
+        t[1].append(t[3])
+        t[0] = t[1]
 
 def p_expresion_binaria(t):
     '''expresion    : expresion MAS expresion

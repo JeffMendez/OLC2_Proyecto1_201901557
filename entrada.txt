@@ -1,3 +1,8 @@
-Evaluar[7>4.6 && 3>=3];
-Evaluar[5<6 || 5>5];
-Evaluar[!(2>3)];
+print(7>4.6 && 3>=3, "-" ,3+3);
+print("Test");
+println("Asies");
+print("Como");
+print("Manzana");
+println(5+3 || 4+5);
+print(!"hola", "mundo");
+println(2+2-34-23);
