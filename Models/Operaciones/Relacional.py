@@ -11,8 +11,8 @@ class Relacional(Expresion):
         self.Columna = columna
 
     def execute(self, entorno):
-        valorIzq = self.OpIzq.execute(None)
-        valorDer = self.OpDer.execute(None)
+        valorIzq = self.OpIzq.execute(entorno)
+        valorDer = self.OpDer.execute(entorno)
 
         resultado = Retorno(False, "Bool")
 

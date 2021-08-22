@@ -1,10 +1,12 @@
-from Models.Aritmetica import *
-from Models.Relacional import *
-from Models.Logico import *
+from Models.Operaciones.Aritmetica import *
+from Models.Operaciones.Relacional import *
+from Models.Operaciones.Logico import *
 
 from Models.Simbolo import *
 
-from Models.Print import *
+from Models.Funciones.Print import *
+
+from Models.Variables.Asignacion import *
 
 rw = {
     "true": "TRUE",
@@ -15,6 +17,13 @@ rw = {
 
     "println": "PRINTLN",
     "print": "PRINT",
+
+    "Int64": "TINT64",
+    "Float64": "TFLOAT64",
+    "String": "TSTRING",
+    "Bool": "TBOOL",
+    "Char": "TCHAR",
+    "Nulo": "TNULO"
 }
 
 tokens  = [
@@ -48,7 +57,10 @@ tokens  = [
     'STRING',
     'CHAR',
 
+    'IGUAL',
+
     'PTCOMA',
+    'DOSPUNTOS',
     'COMA',
 
 ] + list(rw.values())
@@ -79,6 +91,9 @@ t_NOT       = r'!'
 
 t_PTCOMA    = r';'
 t_COMA      = r','
+t_DOSPUNTOS = r':'
+
+t_IGUAL     = r'='
 
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
@@ -167,9 +182,11 @@ def p_instrucciones(t):
         t[0] = t[1]
 
 def p_instruccion(t):
-    'instruccion  : printInst PTCOMA'
+    '''instruccion  : printInst PTCOMA
+                    | asignacion PTCOMA'''
     t[0] = t[1]
 
+# FUNCION PRINT -----------------------------------------------
 def p_instruccion_print(t):
     'printInst : PRINT PARIZQ paramExp PARDER'
     t[0] = Print(t[3], "l")
@@ -186,6 +203,25 @@ def p_param_expresion(t):
     else:
         t[1].append(t[3])
         t[0] = t[1]
+
+# ASIGNACION -----------------------------------------------
+def p_asignacion(t):
+    '''asignacion   : ID IGUAL expresion DOSPUNTOS DOSPUNTOS tipo
+                    | ID IGUAL expresion'''
+    
+    if len(t) == 4:
+        t[0] = Asignacion(t[1], t[3], None)
+    else:
+        t[0] = Asignacion(t[1], t[3], t[6])
+
+def p_tipo(t):
+    '''tipo : TINT64
+            | TFLOAT64
+            | TSTRING
+            | TBOOL
+            | TCHAR
+            | TNULO'''
+    t[0] = t[1]
 
 def p_expresion_binaria(t):
     '''expresion    : expresion MAS expresion
@@ -268,6 +304,8 @@ def p_expresion_basica(t):
         t[0] = Simbolo(t[1], "String", None)
     elif tipo == "CHAR":
         t[0] = Simbolo(t[1], "Char", None)
+    elif tipo == "ID":
+        t[0] = Simbolo(t[1], "ID", t[1])
     elif isinstance(t[1], str):
         value = str(t[1])
         if "true" in value:

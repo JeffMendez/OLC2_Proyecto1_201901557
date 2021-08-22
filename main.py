@@ -1,10 +1,12 @@
 from gramatica import parse
+from Models.Entorno import *
 
 ast = parse()
+entornoGlobal = Entorno(None, "global")
 
 try:
     for instruccion in ast:
-        valor = instruccion.execute(None)
+        valor = instruccion.execute(entornoGlobal)
 
         #if valor.Valor != "ERROR":
         #    print(f"Res: {valor.Valor} , tipo: {valor.Tipo}")

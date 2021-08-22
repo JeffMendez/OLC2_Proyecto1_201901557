@@ -11,12 +11,12 @@ class Logico(Expresion):
         self.Columna = columna
 
     def execute(self, entorno):
-        valorIzq = self.OpIzq.execute(None)
+        valorIzq = self.OpIzq.execute(entorno)
         valorDer = None
         
         # Operaciones unarias
         if self.OpDer:
-            valorDer = self.OpDer.execute(None)
+            valorDer = self.OpDer.execute(entorno)
             if valorDer.Valor == "ERROR":
                 return Retorno("ERROR", "Expresion") 
 

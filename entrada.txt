@@ -1,8 +1,20 @@
-print(7>4.6 && 3>=3, "-" ,3+3);
-print("Test");
-println("Asies" + 2);
-print("Como");
-print("Manzana");
-println(5+3 || 4+5);
-print(!"hola", "mundo");
-println(2+2-34-23);
+println(7>4.6 && 3>=3, "-" ,3+3);
+
+x = (2+1) :: Int64;
+a = "Hola" :: String;
+b = 3.423/432*23 :: Float64;
+c = true :: Bool;
+z = 'a' :: Char;
+w = nothing :: Nulo;
+y = 3+4-5;
+
+println(x);
+println(a * " mundo");
+println(b);
+println(c);
+println(z);
+println(w);
+println(y);
+
+
+
