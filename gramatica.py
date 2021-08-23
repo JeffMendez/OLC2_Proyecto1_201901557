@@ -3,10 +3,13 @@ from Models.Operaciones.Relacional import *
 from Models.Operaciones.Logico import *
 
 from Models.Simbolo import *
+from Models.Bloque import *
 
 from Models.Funciones.Print import *
 
 from Models.Variables.Asignacion import *
+
+from Models.Sentencias.If import *
 
 rw = {
     "true": "TRUE",
@@ -23,7 +26,12 @@ rw = {
     "String": "TSTRING",
     "Bool": "TBOOL",
     "Char": "TCHAR",
-    "Nulo": "TNULO"
+    "Nulo": "TNULO",
+
+    "if" : "IF",
+    "end": "END",
+    "else": "ELSE",
+    "elseif": "ELSEIF"
 }
 
 tokens  = [
@@ -183,7 +191,8 @@ def p_instrucciones(t):
 
 def p_instruccion(t):
     '''instruccion  : printInst PTCOMA
-                    | asignacion PTCOMA'''
+                    | asignacion PTCOMA
+                    | ifInst PTCOMA'''
     t[0] = t[1]
 
 # FUNCION PRINT -----------------------------------------------
@@ -222,6 +231,34 @@ def p_tipo(t):
             | TCHAR
             | TNULO'''
     t[0] = t[1]
+
+# BLOQUE DE INSTRUCCIONES -----------------------------------------------
+def p_bloque(t):
+    'bloque : instrucciones'
+    t[0] = Bloque(t[1])
+
+# SENTENCIA IF -----------------------------------------------
+def p_ifInst(t):
+    '''ifInst   : IF expresion bloque END
+                | IF expresion bloque ELSE bloque END
+                | IF expresion bloque elseIfInst END'''
+    if len(t) == 5:
+        t[0] = If(t[2], t[3], None)
+    elif len(t) == 7:
+        t[0] = If(t[2], t[3], t[5])
+    elif len(t) == 6:
+        t[0] = If(t[2], t[3], t[4])
+
+def p_elseIfInst(t):
+    '''elseIfInst   : ELSEIF expresion bloque
+                    | ELSEIF expresion bloque ELSE bloque
+                    | ELSEIF expresion bloque elseIfInst'''
+    if len(t) == 4:
+        t[0] = If(t[2], t[3], None)
+    elif len(t) == 6:
+        t[0] = If(t[2], t[3], t[5])
+    elif len(t) == 5:
+        t[0] = If(t[2], t[3], t[4])
 
 def p_expresion_binaria(t):
     '''expresion    : expresion MAS expresion

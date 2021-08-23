@@ -8,13 +8,47 @@ z = 'a' :: Char;
 w = nothing :: Nulo;
 y = 3+4-5;
 
-println(x);
+#=println(x);
 println(a * " mundo");
 println(b);
 println(c);
 println(z);
 println(w);
-println(y);
+println(y);=#
+
+if x==3
+    println("Hola1");
+end;
+
+if x == 10
+    println("Hola2");
+else
+    println("Hola3");
+end;
+
+if x == 5
+    println("Hola4");
+elseif x == 3
+    println("Hola5");
+end;
+
+if x == 53
+    println("Hola6");
+elseif x == 37
+    println("Hola7");
+else
+    println("Hola8");
+end;
 
 
-
+if x == 6
+    println("Hola9");
+elseif x == 52
+    println("Hola10");
+elseif x == 5
+    println("Hola11");
+elseif x == 8
+    println("Hola12");
+else
+    println("Hola13");
+end;
