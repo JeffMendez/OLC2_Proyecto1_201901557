@@ -9,7 +9,7 @@ class Bloque(Expresion):
         self.Instrucciones = instrucciones
    
     def execute(self, entorno):
-        nuevoEntorno = Entorno(entorno, "if")
+        nuevoEntorno = Entorno(entorno, "")
         for inst in self.Instrucciones:
             retornoInst = inst.execute(nuevoEntorno)
             if retornoInst != None:

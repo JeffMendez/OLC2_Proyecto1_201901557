@@ -52,3 +52,33 @@ elseif x == 8
 else
     println("Hola13");
 end;
+
+mutable struct objeto
+    nombre;
+    edad::Int64;
+    descripcion::String;
+end;
+
+struct Carro
+    marca;
+    km::Float64;
+    color::String;
+end;
+
+objTest = objeto("a", 5+5*3, "A" * "B" ^ 3);
+objCarro = Carro("Toyota", 123.5, "Azul");
+
+if objCarro.marca == "Toyota"
+    println("El carro es toyota");
+    println(objCarro.km);
+end;
+
+test = objTest.descripcion ^ 3;
+println(test);
+println(objCarro.color * " Y susuki");
+
+objTest.edad = 15;
+println(objTest.edad - 3);
+
+objTest.edad = 50;
+println(objTest.edad + 5);

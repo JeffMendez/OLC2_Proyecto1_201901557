@@ -4,10 +4,13 @@ from Models.Operaciones.Logico import *
 
 from Models.Simbolo import *
 from Models.Bloque import *
+from Models.Llamada import *
 
 from Models.Funciones.Print import *
 
 from Models.Variables.Asignacion import *
+from Models.Variables.Atributo import *
+from Models.Variables.Struct import *
 
 from Models.Sentencias.If import *
 
@@ -31,7 +34,10 @@ rw = {
     "if" : "IF",
     "end": "END",
     "else": "ELSE",
-    "elseif": "ELSEIF"
+    "elseif": "ELSEIF",
+
+    "struct": "STRUCT",
+    "mutable": "MUTABLE",
 }
 
 tokens  = [
@@ -70,6 +76,7 @@ tokens  = [
     'PTCOMA',
     'DOSPUNTOS',
     'COMA',
+    'PUNTO',
 
 ] + list(rw.values())
 
@@ -100,6 +107,7 @@ t_NOT       = r'!'
 t_PTCOMA    = r';'
 t_COMA      = r','
 t_DOSPUNTOS = r':'
+t_PUNTO     = r'\.'
 
 t_IGUAL     = r'='
 
@@ -192,17 +200,18 @@ def p_instrucciones(t):
 def p_instruccion(t):
     '''instruccion  : printInst PTCOMA
                     | asignacion PTCOMA
+                    | structs PTCOMA
                     | ifInst PTCOMA'''
     t[0] = t[1]
 
-# FUNCION PRINT -----------------------------------------------
-def p_instruccion_print(t):
-    'printInst : PRINT PARIZQ paramExp PARDER'
-    t[0] = Print(t[3], "l")
-
-def p_instruccion_println(t):
-    'printInst : PRINTLN PARIZQ paramExp PARDER'
-    t[0] = Print(t[3], "nl")
+# LLAMADAS -----------------------------------------------
+def p_llamada(t):
+    '''llamadaExp   : ID PARIZQ paramExp PARDER
+                    | ID PARIZQ PARDER'''
+    if len(t) == 5:
+        t[0] = Llamada(t[1], t[3])
+    else:
+        t[0] = Llamada(t[1], None)
 
 def p_param_expresion(t):
     '''paramExp     : paramExp COMA expresion
@@ -213,15 +222,27 @@ def p_param_expresion(t):
         t[1].append(t[3])
         t[0] = t[1]
 
+# FUNCION PRINT -----------------------------------------------
+def p_instruccion_print(t):
+    'printInst : PRINT PARIZQ paramExp PARDER'
+    t[0] = Print(t[3], "l")
+
+def p_instruccion_println(t):
+    'printInst : PRINTLN PARIZQ paramExp PARDER'
+    t[0] = Print(t[3], "nl")
+
 # ASIGNACION -----------------------------------------------
 def p_asignacion(t):
     '''asignacion   : ID IGUAL expresion DOSPUNTOS DOSPUNTOS tipo
-                    | ID IGUAL expresion'''
+                    | ID IGUAL expresion
+                    | ID PUNTO ID IGUAL expresion'''
     
     if len(t) == 4:
         t[0] = Asignacion(t[1], t[3], None)
-    else:
+    elif len(t) == 7:
         t[0] = Asignacion(t[1], t[3], t[6])
+    else:
+        t[0] = Asignacion([t[1],t[3]], t[5], "struct")
 
 def p_tipo(t):
     '''tipo : TINT64
@@ -231,6 +252,32 @@ def p_tipo(t):
             | TCHAR
             | TNULO'''
     t[0] = t[1]
+
+# STRUCTS -----------------------------------------------
+def p_structs(t):
+    '''structs  : MUTABLE STRUCT ID atributos END
+                | STRUCT ID atributos END'''
+    if len(t) == 5:
+        t[0] = Struct(t[2], False, t[3])
+    else:
+        t[0] = Struct(t[3], True, t[4])
+    
+def p_atributos(t):
+    '''atributos    : atributos atributo
+                    | atributo'''
+    if len(t) == 2:
+        t[0] = [t[1]]
+    else:
+        t[1].append(t[2])
+        t[0] = t[1]            
+
+def p_atributo(t):
+    '''atributo : ID DOSPUNTOS DOSPUNTOS tipo PTCOMA
+                | ID PTCOMA'''
+    if len(t) == 3:
+        t[0] = Atributo(t[1], "Any")
+    else:
+        t[0] = Atributo(t[1], t[4])
 
 # BLOQUE DE INSTRUCCIONES -----------------------------------------------
 def p_bloque(t):
@@ -330,7 +377,9 @@ def p_expresion_basica(t):
                     | TRUE
                     | FALSE
                     | NOTHING
-                    | ID'''  
+                    | ID PUNTO ID
+                    | ID
+                    | llamadaExp'''  
     tipo = t.slice[1].type
 
     if tipo == "ENTERO":
@@ -342,7 +391,13 @@ def p_expresion_basica(t):
     elif tipo == "CHAR":
         t[0] = Simbolo(t[1], "Char", None)
     elif tipo == "ID":
-        t[0] = Simbolo(t[1], "ID", t[1])
+        if len(t) > 2:
+            t[0] = Simbolo(t[3], "struct", t[1])
+        else:
+            t[0] = Simbolo(t[1], "ID", t[1])
+
+    elif tipo == "llamadaExp":
+        t[0] = t[1]
     elif isinstance(t[1], str):
         value = str(t[1])
         if "true" in value:
