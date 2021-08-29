@@ -35,10 +35,9 @@ class Asignacion(Expresion):
                         print("Error struct inmutable")         
                 else:
                     print("Error no se encontro")
-  
                 return
 
-            # Para variables - Verificar tipo si viene
+            # Para variables, arreglos - Verificar tipo si viene
             if self.Tipo != None:
                 if valorExp.Tipo != self.Tipo:
                     print(f"Error: Asignacion invalida: {self.Tipo} con {valorExp.Tipo}")

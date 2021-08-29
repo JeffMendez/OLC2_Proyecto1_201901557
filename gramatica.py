@@ -1,3 +1,5 @@
+from Abstractos.Error import *
+
 from Models.Operaciones.Aritmetica import *
 from Models.Operaciones.Relacional import *
 from Models.Operaciones.Logico import *
@@ -11,8 +13,11 @@ from Models.Funciones.Print import *
 from Models.Variables.Asignacion import *
 from Models.Variables.Atributo import *
 from Models.Variables.Struct import *
+from Models.Variables.Arreglo import *
 
 from Models.Sentencias.If import *
+
+import Abstractos.Globales as Errores
 
 rw = {
     "true": "TRUE",
@@ -279,6 +284,28 @@ def p_atributo(t):
     else:
         t[0] = Atributo(t[1], t[4])
 
+# ARREGLOS --------------------------------------------------------------
+def p_arreglo(t):
+    '''arreglo  : CORIZQ paramExp CORDER
+                | expresion listaIndices'''
+    if len(t) == 4:
+        t[0] = Arreglo(t[2], "declaracion", None)
+    else:
+        t[0] = Arreglo(t[1], "acceso", t[2])
+
+def p_listaIndices(t):
+    '''listaIndices : listaIndices indice
+                    | indice'''
+    if len(t) == 2:
+        t[0] = [t[1]]
+    else:
+        t[1].append(t[2])
+        t[0] = t[1]  
+
+def p_indice(t):
+    '''indice   : CORIZQ expresion CORDER'''
+    t[0] = t[2] 
+
 # BLOQUE DE INSTRUCCIONES -----------------------------------------------
 def p_bloque(t):
     'bloque : instrucciones'
@@ -379,7 +406,9 @@ def p_expresion_basica(t):
                     | NOTHING
                     | ID PUNTO ID
                     | ID
-                    | llamadaExp'''  
+                    | llamadaExp
+                    | arreglo'''
+
     tipo = t.slice[1].type
 
     if tipo == "ENTERO":
@@ -390,14 +419,15 @@ def p_expresion_basica(t):
         t[0] = Simbolo(t[1], "String", None)
     elif tipo == "CHAR":
         t[0] = Simbolo(t[1], "Char", None)
+    elif tipo == "arreglo":
+        t[0] = t[1]
+    elif tipo == "llamadaExp":
+        t[0] = t[1]
     elif tipo == "ID":
         if len(t) > 2:
             t[0] = Simbolo(t[3], "struct", t[1])
         else:
             t[0] = Simbolo(t[1], "ID", t[1])
-
-    elif tipo == "llamadaExp":
-        t[0] = t[1]
     elif isinstance(t[1], str):
         value = str(t[1])
         if "true" in value:
@@ -408,7 +438,7 @@ def p_expresion_basica(t):
             t[0] = Simbolo(None, "Nulo", None) 
             
 def p_error(t):
-    print("Error sintáctico en '%s'" % t.value)
+    Errores.tablaErrores.append(Error(f"Error sintáctico en '{t.value}'", t.lineno, t.lexpos))
 
 import ply.yacc as yacc
 parser = yacc.yacc()

@@ -1,5 +1,8 @@
 from Abstractos.Expresion import *
 from Abstractos.Retorno import *
+from Abstractos.Error import *
+
+import Abstractos.Globales as Errores
 
 class Aritmetica(Expresion):
 
@@ -37,7 +40,7 @@ class Aritmetica(Expresion):
 
             if (valorIzq.Tipo != "Int64" and valorIzq.Tipo != "Float64") or (valorDer.Tipo != "Int64" and valorDer.Tipo != "Float64"):
                 resultado = Retorno("ERROR", "+")
-                print(f"Error: Suma invalida: {valorIzq.Tipo} con {valorDer.Tipo} ({self.Fila}:{self.Columna})")
+                Errores.tablaErrores.append(Error(f"Suma invalida: {valorIzq.Tipo} con {valorDer.Tipo}", self.Fila, self.Columna))
             else:
                 if valorIzq.Tipo == "Float64" or valorDer.Tipo == "Float64":
                     resultado.Tipo = "Float64"
@@ -53,8 +56,8 @@ class Aritmetica(Expresion):
                 pass
 
             if (valorIzq.Tipo != "Int64" and valorIzq.Tipo != "Float64") or (valorDer.Tipo != "Int64" and valorDer.Tipo != "Float64"):
-                resultado = Retorno("ERROR", "+")
-                print(f"Error: Resta invalida: {valorIzq.Tipo} con {valorDer.Tipo}")
+                resultado = Retorno("ERROR", "-")
+                Errores.tablaErrores.append(Error(f"Resta invalida: {valorIzq.Tipo} con {valorDer.Tipo}", self.Fila, self.Columna))
             else:
                 if valorIzq.Tipo == "Float64" or valorDer.Tipo == "Float64":
                     resultado.Tipo = "Float64"
@@ -76,8 +79,8 @@ class Aritmetica(Expresion):
                     pass
 
                 if (valorIzq.Tipo != "Int64" and valorIzq.Tipo != "Float64") or (valorDer.Tipo != "Int64" and valorDer.Tipo != "Float64"):
-                    resultado = Retorno("ERROR", "+")
-                    print(f"Error: Multiplicacion invalida: {valorIzq.Tipo} con {valorDer.Tipo}")
+                    resultado = Retorno("ERROR", "*")
+                    Errores.tablaErrores.append(Error(f"Multiplicacion invalida: {valorIzq.Tipo} con {valorDer.Tipo}", self.Fila, self.Columna))
                 else:
                     if valorIzq.Tipo == "Float64" or valorDer.Tipo == "Float64":
                         resultado.Tipo = "Float64"
@@ -94,8 +97,8 @@ class Aritmetica(Expresion):
                 pass
 
             if (valorIzq.Tipo != "Int64" and valorIzq.Tipo != "Float64") or (valorDer.Tipo != "Int64" and valorDer.Tipo != "Float64"):
-                resultado = Retorno("ERROR", "+")
-                print(f"Error: Division invalida: {valorIzq.Tipo} con {valorDer.Tipo}")
+                resultado = Retorno("ERROR", "/")
+                Errores.tablaErrores.append(Error(f"Division invalida: {valorIzq.Tipo} con {valorDer.Tipo}", self.Fila, self.Columna))
 
         # UMENOS
         elif self.Operacion == "umenos":
@@ -107,8 +110,8 @@ class Aritmetica(Expresion):
                 pass
 
             if valorIzq.Tipo != "Int64" and valorIzq.Tipo != "Float64":
-                resultado = Retorno("ERROR", "+")
-                print(f"Error: UMenos invalido: con {valorIzq.Tipo}")
+                resultado = Retorno("ERROR", "umenos")
+                Errores.tablaErrores.append(Error(f"Negacion numerica invalida: {valorIzq.Tipo}", self.Fila, self.Columna))
 
         # POTENCIA
         elif self.Operacion == "^":
@@ -128,7 +131,7 @@ class Aritmetica(Expresion):
 
                 if (valorIzq.Tipo != "Int64" and valorIzq.Tipo != "Float64") or (valorDer.Tipo != "Int64" and valorDer.Tipo != "Float64"):
                     resultado = Retorno("ERROR", "+")
-                    print(f"Error: Potencia invalida: {valorIzq.Tipo} con {valorDer.Tipo}")
+                    Errores.tablaErrores.append(Error(f"Potencia invalida: {valorIzq.Tipo} con {valorDer.Tipo}", self.Fila, self.Columna))
                 else:
                     if valorIzq.Tipo == "Float64" or valorDer.Tipo == "Float64":
                         resultado.Tipo = "Float64"
@@ -144,8 +147,8 @@ class Aritmetica(Expresion):
                 pass
 
             if (valorIzq.Tipo != "Int64" and valorIzq.Tipo != "Float64") or (valorDer.Tipo != "Int64" and valorDer.Tipo != "Float64"):
-                resultado = Retorno("ERROR", "+")
-                print(f"Error: Modulo invalido: {valorIzq.Tipo} con {valorDer.Tipo}")
+                resultado = Retorno("ERROR", "%")
+                Errores.tablaErrores.append(Error(f"Modulo invalido: {valorIzq.Tipo} con {valorDer.Tipo}", self.Fila, self.Columna))
             else:
                 if valorIzq.Tipo == "Float64" or valorDer.Tipo == "Float64":
                     resultado.Tipo = "Float64"
