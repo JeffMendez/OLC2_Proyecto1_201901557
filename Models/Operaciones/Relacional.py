@@ -1,5 +1,8 @@
 from Abstractos.Expresion import *
 from Abstractos.Retorno import *
+from Abstractos.Error import *
+
+import Abstractos.Globales as Errores
 
 class Relacional(Expresion):
 
@@ -27,7 +30,7 @@ class Relacional(Expresion):
                 resultado.Valor = valorIzq.Valor > valorDer.Valor
             except:
                 resultado = Retorno("ERROR", ">")
-                print(f"Error: Operacion > invalida: {valorIzq.Tipo} con {valorDer.Tipo}")
+                Errores.tablaErrores.append(Error(f"Mayor '>' invalido: {valorIzq.Tipo} con {valorDer.Tipo}", self.Fila, self.Columna))
 
         # MENOR
         elif self.Operacion == "<":
@@ -36,7 +39,7 @@ class Relacional(Expresion):
                 resultado.Valor = valorIzq.Valor < valorDer.Valor
             except:
                 resultado = Retorno("ERROR", "<")
-                print(f"Error: Operacion < invalida: {valorIzq.Tipo} con {valorDer.Tipo}")
+                Errores.tablaErrores.append(Error(f"Menor '<' invalido: {valorIzq.Tipo} con {valorDer.Tipo}", self.Fila, self.Columna))
 
         # MAYOR IGUAL
         elif self.Operacion == ">=":
@@ -45,7 +48,7 @@ class Relacional(Expresion):
                 resultado.Valor = valorIzq.Valor >= valorDer.Valor
             except:
                 resultado = Retorno("ERROR", ">=")
-                print(f"Error: Operacion >= invalida: {valorIzq.Tipo} con {valorDer.Tipo}")
+                Errores.tablaErrores.append(Error(f"Mayor igual '>=' invalido: {valorIzq.Tipo} con {valorDer.Tipo}", self.Fila, self.Columna))
 
         # MENOR IGUAL
         elif self.Operacion == "<=":
@@ -54,7 +57,7 @@ class Relacional(Expresion):
                 resultado.Valor = valorIzq.Valor <= valorDer.Valor
             except:
                 resultado = Retorno("ERROR", "<=")
-                print(f"Error: Operacion <= invalida: {valorIzq.Tipo} con {valorDer.Tipo}")
+                Errores.tablaErrores.append(Error(f"Menor igual '<=' invalido: {valorIzq.Tipo} con {valorDer.Tipo}", self.Fila, self.Columna))
 
         # IGUALDAD
         elif self.Operacion == "==":
@@ -63,7 +66,7 @@ class Relacional(Expresion):
                 resultado.Valor = valorIzq.Valor == valorDer.Valor
             except:
                 resultado = Retorno("ERROR", "==")
-                print(f"Error: Operacion == invalida: {valorIzq.Tipo} con {valorDer.Tipo}")
+                Errores.tablaErrores.append(Error(f"Igualdad '==' invalida: {valorIzq.Tipo} con {valorDer.Tipo}", self.Fila, self.Columna))
 
         # DISTINTO
         elif self.Operacion == "!=":
@@ -72,7 +75,6 @@ class Relacional(Expresion):
                 resultado.Valor = valorIzq.Valor != valorDer.Valor
             except:
                 resultado = Retorno("ERROR", "!=")
-                print(f"Error: Operacion != invalida: {valorIzq.Tipo} con {valorDer.Tipo}")
+                Errores.tablaErrores.append(Error(f"Igualdad '!=' invalida: {valorIzq.Tipo} con {valorDer.Tipo}", self.Fila, self.Columna))
         
-
         return resultado

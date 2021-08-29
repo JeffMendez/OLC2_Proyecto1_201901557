@@ -1,18 +1,25 @@
 from Abstractos.Expresion import *
 from Abstractos.Retorno import *
+from Abstractos.Error import *
+
 from Models.Entorno import *
 from Models.Variables.Struct import *
 
+import Abstractos.Globales as Errores
+
 class Llamada(Expresion):
 
-    def __init__(self, id, params):
+    def __init__(self, id, params, fila, columna):
         self.ID = id
         self.Params = params
+        self.Fila = fila
+        self.Columna = columna
     
     def execute(self, entorno):
         llamada = entorno.getSimbolo(self.ID)
 
         if llamada != None:
+
             # Para structs
             if llamada.Tipo == "struct":
                 structBase = llamada.Valor
@@ -25,9 +32,10 @@ class Llamada(Expresion):
                         objeto.Atributos[i].Valor = valorParam.Valor
                         objeto.Atributos[i].Tipo = valorParam.Tipo
                     else:
-                        print("dato incorrecto")
+                        Errores.tablaErrores.append(Error(f"El tipo del atributo no coincide: {objeto.Atributos[i].ID} con {valorParam.Tipo}", self.Fila, self.Columna))
                         return Retorno("ERROR", "struct")
 
                 return Retorno(objeto, "struct")
         else:
-            print("No existe")
+            Errores.tablaErrores.append(Error(f"La funcion o struct no existe: {self.ID}", self.Fila, self.Columna))
+            return Retorno("ERROR", "llamada")

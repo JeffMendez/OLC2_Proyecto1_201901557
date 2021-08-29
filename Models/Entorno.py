@@ -1,4 +1,7 @@
 from Models.Simbolo import *
+from Abstractos.Error import *
+
+import Abstractos.Globales as Errores
 
 class Entorno:
 
@@ -24,14 +27,14 @@ class Entorno:
         self.TablaSimbolos[id] = nuevoSimbolo
     
     # Para structs
-    def setStruct(self, id, struct):
+    def setStruct(self, id, struct, fila, columna):
         nuevoStruct = Simbolo(struct, "struct", id)
 
         entorno = self
         # Verificar que no exista
         while entorno != None:
             if id in entorno.TablaSimbolos.keys():
-                print("Struct repetido")
+                Errores.tablaErrores.append(Error(f"Struct ya declarado: {id}", fila, columna))
                 return
             entorno = entorno.Padre
         # Setear si no esta agregado

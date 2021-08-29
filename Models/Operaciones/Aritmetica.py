@@ -130,7 +130,7 @@ class Aritmetica(Expresion):
                     pass
 
                 if (valorIzq.Tipo != "Int64" and valorIzq.Tipo != "Float64") or (valorDer.Tipo != "Int64" and valorDer.Tipo != "Float64"):
-                    resultado = Retorno("ERROR", "+")
+                    resultado = Retorno("ERROR", "^")
                     Errores.tablaErrores.append(Error(f"Potencia invalida: {valorIzq.Tipo} con {valorDer.Tipo}", self.Fila, self.Columna))
                 else:
                     if valorIzq.Tipo == "Float64" or valorDer.Tipo == "Float64":

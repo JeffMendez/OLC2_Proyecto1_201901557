@@ -20,7 +20,8 @@ class Print(Expresion):
                 error = True
                 break
             else:
-                if valorExp.Tipo == "Nulo": valorExp.Valor = "nothing" # Impresion unica para nothing
+                if valorExp.Tipo == "Nulo": valorExp.Valor = "nothing"
+                if valorExp.Tipo == "Bool": valorExp.Valor = "true" if (valorExp.Valor == True) else "false"
                 salida += str(valorExp.Valor) + " "
 
         if not error:

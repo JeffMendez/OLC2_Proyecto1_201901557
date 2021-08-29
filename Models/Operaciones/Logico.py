@@ -1,5 +1,8 @@
 from Abstractos.Expresion import *
 from Abstractos.Retorno import *
+from Abstractos.Error import *
+
+import Abstractos.Globales as Errores
 
 class Logico(Expresion):
 
@@ -29,44 +32,28 @@ class Logico(Expresion):
         # AND
         if self.Operacion == "and":
 
-            try:
-                resultado.Valor = valorIzq.Valor and valorDer.Valor
-
-                # Operacion que no resulta en boolean
-                if resultado.Valor != False and resultado.Valor != True:
-                    if resultado.Valor == valorIzq.Valor:
-                        resultado.Tipo = valorIzq.Tipo
-                    else:
-                        resultado.Tipo = valorDer.Tipo
-
-            except:
+            if valorIzq.Tipo != "Bool" or valorDer.Tipo != "Bool":
                 resultado = Retorno("ERROR", "and")
-                print(f"Error: AND invalido: {valorIzq.Tipo} con {valorDer.Tipo}")
+                Errores.tablaErrores.append(Error(f"AND invalido: {valorIzq.Tipo} con {valorDer.Tipo}", self.Fila, self.Columna))
+            else:
+                resultado.Valor = valorIzq.Valor and valorDer.Valor
 
         # OR
         elif self.Operacion == "or":
 
-            try:
-                resultado.Valor = valorIzq.Valor or valorDer.Valor
-
-                # Operacion que no resulta en boolean
-                if resultado.Valor != False and resultado.Valor != True:
-                    if resultado.Valor == valorIzq.Valor:
-                        resultado.Tipo = valorIzq.Tipo
-                    else:
-                        resultado.Tipo = valorDer.Tipo
-                        
-            except:
+            if valorIzq.Tipo != "Bool" or valorDer.Tipo != "Bool":
                 resultado = Retorno("ERROR", "or")
-                print(f"Error: OR invalido: {valorIzq.Tipo} con {valorDer.Tipo}")
+                Errores.tablaErrores.append(Error(f"OR invalido: {valorIzq.Tipo} con {valorDer.Tipo}", self.Fila, self.Columna))
+            else:
+                resultado.Valor = valorIzq.Valor or valorDer.Valor
 
         # NOT
         elif self.Operacion == "not":
 
-            try:
-                resultado.Valor = not valorIzq.Valor 
-            except:
-                resultado = Retorno("ERROR", "or")
-                print(f"Error: NOT invalido: {valorIzq.Tipo} con {valorDer.Tipo}")
+            if valorIzq.Tipo != "Bool":
+                resultado = Retorno("ERROR", "not")
+                Errores.tablaErrores.append(Error(f"NOT invalido: {valorIzq.Tipo}", self.Fila, self.Columna))
+            else:
+                resultado.Valor = not valorIzq.Valor
 
         return resultado

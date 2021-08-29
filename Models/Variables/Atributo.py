@@ -7,6 +7,7 @@ class Atributo(Expresion):
         self.ID = id
         self.Tipo = tipo
         self.Valor = None
+        self.TipoOrigen = tipo # Para los datos any
 
     def execute(self, entorno):
         return Retorno(self.Valor, self.Tipo)

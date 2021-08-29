@@ -214,9 +214,9 @@ def p_llamada(t):
     '''llamadaExp   : ID PARIZQ paramExp PARDER
                     | ID PARIZQ PARDER'''
     if len(t) == 5:
-        t[0] = Llamada(t[1], t[3])
+        t[0] = Llamada(t[1], t[3], t.lineno(1), t.lexpos(1))
     else:
-        t[0] = Llamada(t[1], None)
+        t[0] = Llamada(t[1], None, t.lineno(1), t.lexpos(1))
 
 def p_param_expresion(t):
     '''paramExp     : paramExp COMA expresion
@@ -243,11 +243,11 @@ def p_asignacion(t):
                     | ID PUNTO ID IGUAL expresion'''
     
     if len(t) == 4:
-        t[0] = Asignacion(t[1], t[3], None)
+        t[0] = Asignacion(t[1], t[3], None, t.lineno(1), t.lexpos(1))
     elif len(t) == 7:
-        t[0] = Asignacion(t[1], t[3], t[6])
+        t[0] = Asignacion(t[1], t[3], t[6], t.lineno(1), t.lexpos(1))
     else:
-        t[0] = Asignacion([t[1],t[3]], t[5], "struct")
+        t[0] = Asignacion([t[1],t[3]], t[5], "struct", t.lineno(1), t.lexpos(1))
 
 def p_tipo(t):
     '''tipo : TINT64
@@ -263,9 +263,9 @@ def p_structs(t):
     '''structs  : MUTABLE STRUCT ID atributos END
                 | STRUCT ID atributos END'''
     if len(t) == 5:
-        t[0] = Struct(t[2], False, t[3])
+        t[0] = Struct(t[2], False, t[3], t.lineno(1), t.lexpos(1))
     else:
-        t[0] = Struct(t[3], True, t[4])
+        t[0] = Struct(t[3], True, t[4], t.lineno(1), t.lexpos(1))
     
 def p_atributos(t):
     '''atributos    : atributos atributo
@@ -317,22 +317,22 @@ def p_ifInst(t):
                 | IF expresion bloque ELSE bloque END
                 | IF expresion bloque elseIfInst END'''
     if len(t) == 5:
-        t[0] = If(t[2], t[3], None)
+        t[0] = If(t[2], t[3], None, t.lineno(1), t.lexpos(0))
     elif len(t) == 7:
-        t[0] = If(t[2], t[3], t[5])
+        t[0] = If(t[2], t[3], t[5], t.lineno(1), t.lexpos(0))
     elif len(t) == 6:
-        t[0] = If(t[2], t[3], t[4])
+        t[0] = If(t[2], t[3], t[4], t.lineno(1), t.lexpos(0))
 
 def p_elseIfInst(t):
     '''elseIfInst   : ELSEIF expresion bloque
                     | ELSEIF expresion bloque ELSE bloque
                     | ELSEIF expresion bloque elseIfInst'''
     if len(t) == 4:
-        t[0] = If(t[2], t[3], None)
+        t[0] = If(t[2], t[3], None, t.lineno(1), t.lexpos(0))
     elif len(t) == 6:
-        t[0] = If(t[2], t[3], t[5])
+        t[0] = If(t[2], t[3], t[5], t.lineno(1), t.lexpos(0))
     elif len(t) == 5:
-        t[0] = If(t[2], t[3], t[4])
+        t[0] = If(t[2], t[3], t[4], t.lineno(1), t.lexpos(0))
 
 def p_expresion_binaria(t):
     '''expresion    : expresion MAS expresion
@@ -412,30 +412,30 @@ def p_expresion_basica(t):
     tipo = t.slice[1].type
 
     if tipo == "ENTERO":
-        t[0] = Simbolo(t[1], "Int64", None)
+        t[0] = Simbolo(t[1], "Int64", None, t.lineno(1), t.lexpos(1))
     elif tipo == "DECIMAL":
-        t[0] = Simbolo(t[1], "Float64", None)
+        t[0] = Simbolo(t[1], "Float64", None, t.lineno(1), t.lexpos(1))
     elif tipo == "STRING":
-        t[0] = Simbolo(t[1], "String", None)
+        t[0] = Simbolo(t[1], "String", None, t.lineno(1), t.lexpos(1))
     elif tipo == "CHAR":
-        t[0] = Simbolo(t[1], "Char", None)
+        t[0] = Simbolo(t[1], "Char", None, t.lineno(1), t.lexpos(1))
     elif tipo == "arreglo":
         t[0] = t[1]
     elif tipo == "llamadaExp":
         t[0] = t[1]
     elif tipo == "ID":
         if len(t) > 2:
-            t[0] = Simbolo(t[3], "struct", t[1])
+            t[0] = Simbolo(t[3], "struct", t[1], t.lineno(1), t.lexpos(1))
         else:
-            t[0] = Simbolo(t[1], "ID", t[1])
+            t[0] = Simbolo(t[1], "ID", t[1], t.lineno(1), t.lexpos(1))
     elif isinstance(t[1], str):
         value = str(t[1])
         if "true" in value:
-            t[0] = Simbolo(True, "Bool", None)
+            t[0] = Simbolo(True, "Bool", None, t.lineno(1), t.lexpos(1))
         elif "false" in value:
-            t[0] = Simbolo(False, "Bool", None)
+            t[0] = Simbolo(False, "Bool", None, t.lineno(1), t.lexpos(1))
         elif "nothing" in value:
-            t[0] = Simbolo(None, "Nulo", None) 
+            t[0] = Simbolo(None, "Nulo", None, t.lineno(1), t.lexpos(1)) 
             
 def p_error(t):
     Errores.tablaErrores.append(Error(f"Error sintáctico en '{t.value}'", t.lineno, t.lexpos))
