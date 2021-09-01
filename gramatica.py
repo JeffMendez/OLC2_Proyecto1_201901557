@@ -16,6 +16,8 @@ from Models.Variables.Struct import *
 from Models.Variables.Arreglo import *
 
 from Models.Sentencias.If import *
+from Models.Sentencias.While import *
+from Models.Sentencias.For import *
 
 import Abstractos.Globales as Errores
 
@@ -36,10 +38,17 @@ rw = {
     "Char": "TCHAR",
     "Nulo": "TNULO",
 
-    "if" : "IF",
+    "begin": "BEGIN",
     "end": "END",
+    
+    "if" : "IF",
     "else": "ELSE",
     "elseif": "ELSEIF",
+
+    "while": "WHILE",
+
+    "for": "FOR",
+    "in": "IN",
 
     "struct": "STRUCT",
     "mutable": "MUTABLE",
@@ -206,7 +215,9 @@ def p_instruccion(t):
     '''instruccion  : printInst PTCOMA
                     | asignacion PTCOMA
                     | structs PTCOMA
-                    | ifInst PTCOMA'''
+                    | ifInst PTCOMA
+                    | whileInst PTCOMA
+                    | forInst PTCOMA'''
     t[0] = t[1]
 
 # LLAMADAS -----------------------------------------------
@@ -289,9 +300,9 @@ def p_arreglo(t):
     '''arreglo  : CORIZQ paramExp CORDER
                 | expresion listaIndices'''
     if len(t) == 4:
-        t[0] = Arreglo(t[2], "declaracion", None)
+        t[0] = Arreglo(t[2], "declaracion", None, t.lineno(2), t.lexpos(2))
     else:
-        t[0] = Arreglo(t[1], "acceso", t[2])
+        t[0] = Arreglo(t[1], "acceso", t[2], t.lineno(1), t.lexpos(1))
 
 def p_listaIndices(t):
     '''listaIndices : listaIndices indice
@@ -305,6 +316,14 @@ def p_listaIndices(t):
 def p_indice(t):
     '''indice   : CORIZQ expresion CORDER'''
     t[0] = t[2] 
+
+# TIPO RANGO ------------------------------------------------------------
+def p_rango(t):
+    '''rango    : expresion DOSPUNTOS expresion
+                | BEGIN DOSPUNTOS expresion
+                | expresion DOSPUNTOS END
+                | BEGIN DOSPUNTOS END'''
+    t[0] = Simbolo([t[1], t[3]], "Rango", None, t.lineno(1), t.lexpos(1))
 
 # BLOQUE DE INSTRUCCIONES -----------------------------------------------
 def p_bloque(t):
@@ -334,6 +353,17 @@ def p_elseIfInst(t):
     elif len(t) == 5:
         t[0] = If(t[2], t[3], t[4], t.lineno(1), t.lexpos(0))
 
+# SENTENCIA WHILE -----------------------------------------------------
+def p_whileInst(t):
+    '''whileInst    : WHILE expresion bloque END'''
+    t[0] = While(t[2], t[3], t.lineno(1), t.lexpos(0))
+
+# SENTENCIA FOR -----------------------------------------------------
+def p_forInst(t):
+    '''forInst    : FOR ID IN expresion bloque END'''
+    t[0] = For(t[2], t[4], t[5], t.lineno(1), t.lexpos(0))
+
+# EXPRESIONES -----------------------------------------------------
 def p_expresion_binaria(t):
     '''expresion    : expresion MAS expresion
                     | expresion MENOS expresion
@@ -406,6 +436,7 @@ def p_expresion_basica(t):
                     | NOTHING
                     | ID PUNTO ID
                     | ID
+                    | rango
                     | llamadaExp
                     | arreglo'''
 
@@ -419,6 +450,8 @@ def p_expresion_basica(t):
         t[0] = Simbolo(t[1], "String", None, t.lineno(1), t.lexpos(1))
     elif tipo == "CHAR":
         t[0] = Simbolo(t[1], "Char", None, t.lineno(1), t.lexpos(1))
+    elif tipo == "rango":
+        t[0] = t[1]
     elif tipo == "arreglo":
         t[0] = t[1]
     elif tipo == "llamadaExp":

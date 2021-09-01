@@ -28,9 +28,29 @@ class Llamada(Expresion):
                 for i in range(len(self.Params)):
                     valorParam = self.Params[i].execute(entorno)
 
-                    if objeto.Atributos[i].Tipo == "Any" or valorParam.Tipo == objeto.Atributos[i].Tipo:
-                        objeto.Atributos[i].Valor = valorParam.Valor
-                        objeto.Atributos[i].Tipo = valorParam.Tipo
+                    if objeto.Atributos[i].Tipo == "Any" or valorParam.Tipo == objeto.Atributos[i].Tipo or objeto.Atributos[i].TipoOrigen == "Any":
+                        
+                        if valorParam.Tipo == "struct":
+                            # Para valores referencias
+                            objeto.Atributos[i].Valor = self.Params[i]
+                            objeto.Atributos[i].Tipo = "ID"
+
+                        elif valorParam.Tipo == "array":
+
+                            if hasattr(self.Params[i], 'Array'):
+                                # Declaracion
+                                objeto.Atributos[i].Valor = valorParam.Valor
+                                objeto.Atributos[i].Tipo = valorParam.Tipo
+                            else:
+                                # Referencia
+                                objeto.Atributos[i].Valor = self.Params[i]
+                                objeto.Atributos[i].Tipo = "ID"
+
+                        else:
+                            # Variables normales
+                            objeto.Atributos[i].Valor = valorParam.Valor
+                            objeto.Atributos[i].Tipo = valorParam.Tipo
+
                     else:
                         Errores.tablaErrores.append(Error(f"El tipo del atributo no coincide: {objeto.Atributos[i].ID} con {valorParam.Tipo}", self.Fila, self.Columna))
                         return Retorno("ERROR", "struct")

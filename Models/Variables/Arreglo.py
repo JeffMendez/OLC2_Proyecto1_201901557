@@ -1,31 +1,55 @@
 from Abstractos.Expresion import *
 from Abstractos.Retorno import *
+from Abstractos.Error import *
+
+import Abstractos.Globales as Errores
 
 class Arreglo(Expresion):
 
-    def __init__(self, array, tipo, indices):
+    def __init__(self, array, tipo, indices, fila, columna):
         self.Array = array
         self.Tipo = tipo       # Si es declaracion o acceso
-        self.Indices = indices # 
+        self.Indices = indices
+        self.Fila = fila
+        self.Columna = columna
 
     def execute(self, entorno):
         if self.Tipo == "declaracion":
 
+            arrayIndices = []
             # Verificacion array
             for exp in self.Array:
                 valorExp = exp.execute(entorno)
                 if valorExp.Valor == "ERROR":
                     return Retorno("ERROR", "array")
-            return Retorno(self.Array, "array")
+              
+                if valorExp.Tipo == "struct":
+                    # Structs y arreglos por ref se queda solo el objeto para acceso
+                    arrayIndices.append(exp)
+                elif valorExp.Tipo == "array":
+                    # Para arreglos, verificar si es una ref o se declara dentro
+                    if hasattr(exp, 'Array'):
+                        # Declaracion
+                        arrayIndices.append(valorExp)
+                    else:
+                        # Referencia
+                        arrayIndices.append(exp)         
+                else:
+                    # Variables normales se guarda valor   
+                    arrayIndices.append(valorExp)
+
+            return Retorno(arrayIndices, "array")
 
         else:
-            objeto = self.Array.execute(entorno)
-            if objeto.Tipo == "array":
+            accesoObj = self.Array.execute(entorno)
+            
+            if accesoObj.Tipo == "array":
                 # Verificar indices
                 indicesAcceso = []
                 for indice in self.Indices:
                     exp = indice.execute(entorno)
-                    if exp.Valor == "ERROR" or exp.Tipo != "Int64":
+                    if exp.Valor == "ERROR" or exp.Tipo != "Int64" or exp.Valor == 0:
+                        Errores.tablaErrores.append(Error(f"El indice no es Int64, es 0 o antecede un error", self.Fila, self.Columna))
                         return Retorno("ERROR", "indice")
                     else:
                         indicesAcceso.append(exp.Valor)
@@ -34,15 +58,24 @@ class Arreglo(Expresion):
                 while len(indicesAcceso) > 0: # Iterar hasta completar los indices
                     indiceActual = indicesAcceso[0]
                     try:
-                        valorIndice = objeto.Valor[indiceActual].execute(entorno)
+                        objIndice = accesoObj.Valor[indiceActual-1]
+  
+                        if objIndice.Tipo == "ID": 
+                            # Pasar ref structs y arreglos
+                            valorIndice = objIndice.execute(entorno)
+                        else:
+                            # Pasar valor
+                            valorIndice = objIndice
+                        
                         del indicesAcceso[0] # Borra el indice ya procesado
-                        objeto = valorIndice # Nuevo valor a iterar
+                        accesoObj = valorIndice # Nuevo valor a iterar
                     except:
-                        print("Error al acceder")
+                        Errores.tablaErrores.append(Error(f"Error al acceder al indice", self.Fila, self.Columna))
                         return Retorno("ERROR", "indice")
 
                 return Retorno(valorIndice.Valor, valorIndice.Tipo)
+
             else:
-                print("el id no es arreglo")
+                Errores.tablaErrores.append(Error(f"El id no es arreglo", self.Fila, self.Columna))
                 return Retorno("ERROR", "indice")
 

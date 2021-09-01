@@ -20,10 +20,13 @@ class Print(Expresion):
                 error = True
                 break
             else:
-                if valorExp.Tipo == "Nulo": valorExp.Valor = "nothing"
-                if valorExp.Tipo == "Bool": valorExp.Valor = "true" if (valorExp.Valor == True) else "false"
-                salida += str(valorExp.Valor) + " "
+                if valorExp.Tipo == "Nulo": salida = "nothing"
+                elif valorExp.Tipo == "Bool": salida = "true" if (valorExp.Valor == True) else "false"
+                elif valorExp.Tipo == "struct": salida = Print.printStruct(valorExp, exp, entorno)
+                elif valorExp.Tipo == "array": salida = Print.printArreglo(valorExp, entorno)
 
+                else: salida += str(valorExp.Valor) + " "
+    
         if not error:
             if self.Tipo == "nl": 
                 # Nueva linea
@@ -31,5 +34,63 @@ class Print(Expresion):
             else:
                 # Misma linea
                 print(salida, end="")
+
+    def printStruct(objeto, simbolo, entorno = None):
+        print(objeto.Valor, simbolo.Valor, "1111")
+
+        objStruct = objeto.Valor
+        
+        salida = simbolo.Valor + "("
+
+        for i, attr in enumerate(objStruct.Atributos):
+            if attr.Tipo == "ID":
+                print("::::::",attr.Valor, attr.Tipo)
+                # Attr por ref
+                item = attr.Valor
+                objetoRef = item.execute(entorno)
+
+                print(">>>>>>", objetoRef, objetoRef.Valor, objetoRef.Tipo)
+
+                print("??????", objetoRef.Valor.Atributos)
+
+                if objetoRef.Tipo == "array": salida += Print.printArreglo(objetoRef, entorno)
+                elif objetoRef.Tipo == "struct": 
+                    salida += Print.printStruct(objetoRef, attr, entorno)
+            else:
+                # Array declarado dentro
+                if attr.Tipo == "array": salida += Print.printArreglo(attr,entorno)
+                # Attr por valor
+                else: salida += str(attr.Valor)
+
+            if i < len(objStruct.Atributos) - 1: salida += ","
+
+        salida += ")"
+
+        return salida
+
+    def printArreglo(objeto, entorno = None):
+        salida = "["
+
+        for i, item in enumerate(objeto.Valor):
+      
+            if item.Tipo == "ID":
+                print(item)
+                # Item por ref
+                objetoRef = item.execute(entorno)
+                if objetoRef.Tipo == "array": salida += Print.printArreglo(objetoRef, entorno)
+                elif objetoRef.Tipo == "struct": salida += Print.printStruct(objetoRef, item, entorno)
+            else:
+                # Array declarado dentro
+                if item.Tipo == "array": salida += Print.printArreglo(item,entorno)
+                # Item por valor
+                else: salida += str(item.Valor)
+
+            if i < len(objeto.Valor) - 1: salida += ","
+
+        salida += "]" 
+
+        return salida
+
+
        
         

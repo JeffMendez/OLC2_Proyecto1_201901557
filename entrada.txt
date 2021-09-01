@@ -83,6 +83,74 @@ println(objTest.edad - 3);
 objTest.edad = 50;
 println(objTest.edad + 5);
 
+x = 10;
+while x > 3
+    x = x - 1;
+    print(x, "");
+end;
+
+println("");
+
+# Para rango
+for i in 0:5
+    if i == 5
+        print(i);
+    else
+        print(i, "-");
+    end;
+end;
+
+println("");
+
+# Para letra
+num = 0;
+for letra in "Hola Mundo!"
+    if num < 4
+        print(letra, "-");
+    else
+        print(letra, "^");
+    end;
+    num = num+1;
+end;
+
+println("");
+
+# Para arreglo
+arrayyy = [1,2,3];
+carta = "as";
+x = 599;
+
+#arrxdc = [1,arrayyy,objTest];
+#println(arrxdc);
+
+#println(objTest);
+objAAA = objeto(objTest, x, "A");
+println(objAAA);
+
+#println(objTest);
+
+#println(sdf);
+
+#println(lista);
+
+#println(objTest);
+#println(lista[1]);
+
+#println(lista[1][2]);
+#println(lista[2][2]);
+#println(lista[3]);
+#println(lista[4]);
+
+#xasdf = lista[4];
+#println(xasdf.edad);
+
+#=println(lista[7][1]);
+println(lista[8]);
+
+xasdf = lista[9];
+println(xasdf.edad);=#
+
+#=
 arreglo = [["Hola", 2],3*3.23,1-23/32];
 testAcc = arreglo[0+4-4][3-2];
 print(testAcc, arreglo[0][0] ^ 3);
@@ -90,4 +158,4 @@ print(testAcc, arreglo[0][0] ^ 3);
 arregloStr = [objTest, objCarro];
 
 println(objTest.edad);
-
+=#

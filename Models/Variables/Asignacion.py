@@ -30,13 +30,14 @@ class Asignacion(Expresion):
                     if objStruct.Mutable:
                         for attrSt in objStruct.Atributos:
                             if attrSt.ID == attr:
+                                print(attrSt.ID, attrSt.Tipo)
                                 if attrSt.TipoOrigen == "Any" or valorExp.Tipo == attrSt.Tipo:
                                     # Este valor se pasa por ref al simbolo
                                     attrSt.Valor = valorExp.Valor
                                     attrSt.Tipo = valorExp.Tipo
                                 else:
                                     # Tipo no coincide
-                                    Errores.tablaErrores.append(Error(f"El tipo del atributo no coincide: {attrSt.ID} con {valorExp.Tipo}", self.Fila, self.Columna))
+                                    Errores.tablaErrores.append(Error(f"El tipo del atributo no coincide: {attrSt.Tipo} con {valorExp.Tipo}", self.Fila, self.Columna))
                                 return
                         # Attr no existe
                         Errores.tablaErrores.append(Error(f"El atributo no existe: {attr}", self.Fila, self.Columna))
