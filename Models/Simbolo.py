@@ -17,7 +17,8 @@ class Simbolo(Expresion):
         self.Columna = columna
 
     def execute(self, entorno):
-
+        
+        # Acceso de variables normales
         if self.Tipo == "ID":
             simbolo = entorno.getSimbolo(self.ID)
             if simbolo == None:
@@ -25,6 +26,7 @@ class Simbolo(Expresion):
                 return Retorno("ERROR", "Variable")
             return Retorno(simbolo.Valor, simbolo.Tipo)
         
+        # Acceso a atributos Ej: Objeto.nombre
         elif self.Tipo == "struct":
             simbolo = entorno.getSimbolo(self.ID)
             if simbolo == None:
@@ -34,6 +36,13 @@ class Simbolo(Expresion):
             objStruct = simbolo.Valor
             for attr in objStruct.Atributos:
                 if attr.ID == self.Valor:
+
+                    # Si son structs o arreglos obtener ref
+                    if attr.Tipo == "ID":
+                        objRef = attr.Valor.execute(entorno)
+                        self.Valor = self.ID
+                        return Retorno(objRef.Valor, objRef.Tipo)
+                  
                     return Retorno(attr.Valor, attr.Tipo)
             
             Errores.tablaErrores.append(Error(f"Atributo no existe", self.Fila, self.Columna))

@@ -20,10 +20,10 @@ class Print(Expresion):
                 error = True
                 break
             else:
-                if valorExp.Tipo == "Nulo": salida = "nothing"
-                elif valorExp.Tipo == "Bool": salida = "true" if (valorExp.Valor == True) else "false"
-                elif valorExp.Tipo == "struct": salida = Print.printStruct(valorExp, exp, entorno)
-                elif valorExp.Tipo == "array": salida = Print.printArreglo(valorExp, entorno)
+                if valorExp.Tipo == "Nulo": salida += "nothing"
+                elif valorExp.Tipo == "Bool": salida += "true" if (valorExp.Valor == True) else "false"
+                elif valorExp.Tipo == "struct": salida += Print.printStruct(valorExp, exp, entorno)
+                elif valorExp.Tipo == "array": salida += Print.printArreglo(valorExp, entorno)
 
                 else: salida += str(valorExp.Valor) + " "
     
@@ -36,26 +36,21 @@ class Print(Expresion):
                 print(salida, end="")
 
     def printStruct(objeto, simbolo, entorno = None):
-        print(objeto.Valor, simbolo.Valor, "1111")
+        #print(objeto.Valor, simbolo.Valor, "1111")
 
         objStruct = objeto.Valor
         
-        salida = simbolo.Valor + "("
+        salida = objStruct.ID + "("
 
         for i, attr in enumerate(objStruct.Atributos):
             if attr.Tipo == "ID":
-                print("::::::",attr.Valor, attr.Tipo)
                 # Attr por ref
                 item = attr.Valor
                 objetoRef = item.execute(entorno)
 
-                print(">>>>>>", objetoRef, objetoRef.Valor, objetoRef.Tipo)
-
-                print("??????", objetoRef.Valor.Atributos)
-
                 if objetoRef.Tipo == "array": salida += Print.printArreglo(objetoRef, entorno)
                 elif objetoRef.Tipo == "struct": 
-                    salida += Print.printStruct(objetoRef, attr, entorno)
+                    salida += Print.printStruct(objetoRef, attr.Valor, entorno)
             else:
                 # Array declarado dentro
                 if attr.Tipo == "array": salida += Print.printArreglo(attr,entorno)
@@ -72,9 +67,8 @@ class Print(Expresion):
         salida = "["
 
         for i, item in enumerate(objeto.Valor):
-      
+            
             if item.Tipo == "ID":
-                print(item)
                 # Item por ref
                 objetoRef = item.execute(entorno)
                 if objetoRef.Tipo == "array": salida += Print.printArreglo(objetoRef, entorno)

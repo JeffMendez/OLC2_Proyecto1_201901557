@@ -1,59 +1,4 @@
-println(7>4.6 && 3>=3, "-" ,3+3);
-
-x = (2+1) :: Int64;
-a = "Hola" :: String;
-b = 3.423/432*23 :: Float64;
-c = true :: Bool;
-z = 'a' :: Char;
-w = nothing :: Nulo;
-y = 3+4-5;
-
-println(x);
-println(a * " mundo");
-println(b);
-println(c);
-println(z);
-println(w);
-println(y);
-
-if x==3
-    println("Hola1");
-end;
-
-if x == 10
-    println("Hola2");
-else
-    println("Hola3");
-end;
-
-if x == 5
-    println("Hola4");
-elseif x == 3
-    println("Hola5");
-end;
-
-if x == 53
-    println("Hola6");
-elseif x == 37
-    println("Hola7");
-else
-    println("Hola8");
-end;
-
-
-if x == 6
-    println("Hola9");
-elseif x == 52
-    println("Hola10");
-elseif x == 5
-    println("Hola11");
-elseif x == 8
-    println("Hola12");
-else
-    println("Hola13");
-end;
-
-mutable struct objeto
+mutable struct Objeto
     nombre;
     edad::Int64;
     descripcion::String;
@@ -65,97 +10,30 @@ struct Carro
     color::String;
 end;
 
-objTest = objeto("a", 5+5*3, "A" * "B" ^ 3);
-objCarro = Carro("Toyota", 123.5, "Azul");
+arreglo = [1,2,3];
 
-if objCarro.marca == "Toyota"
-    println("El carro es toyota");
-    println(objCarro.km);
-end;
+objAAAA = Objeto([2,3, arreglo], 21, "No");
+objTest = Objeto(objAAAA, 12, "Si");
+objComa = Objeto(objTest, 35, "No");
 
-test = objTest.descripcion ^ 3;
-println(test);
-println(objCarro.color * " Y susuki");
+araLes = [[1,2],true,arreglo,objComa];
 
-objTest.edad = 15;
-println(objTest.edad - 3);
+arreglo = [3.12, 9, 8];
 
-objTest.edad = 50;
-println(objTest.edad + 5);
+objAAAA.edad = 100;
+objTest.edad = 200;
+objComa.edad = 300;
 
-x = 10;
-while x > 3
-    x = x - 1;
-    print(x, "");
-end;
+ss = objAAAA.nombre;
+println(ss[3][2]);
 
-println("");
+println(objAAAA.nombre);
+println(objTest);
+println(objComa);
+println(araLes);
 
-# Para rango
-for i in 0:5
-    if i == 5
-        print(i);
-    else
-        print(i, "-");
-    end;
-end;
-
-println("");
-
-# Para letra
-num = 0;
-for letra in "Hola Mundo!"
-    if num < 4
-        print(letra, "-");
-    else
-        print(letra, "^");
-    end;
-    num = num+1;
-end;
-
-println("");
-
-# Para arreglo
-arrayyy = [1,2,3];
-carta = "as";
-x = 599;
-
-#arrxdc = [1,arrayyy,objTest];
-#println(arrxdc);
+#println(objAAAA);
 
 #println(objTest);
-objAAA = objeto(objTest, x, "A");
-println(objAAA);
+#println(objComa);
 
-#println(objTest);
-
-#println(sdf);
-
-#println(lista);
-
-#println(objTest);
-#println(lista[1]);
-
-#println(lista[1][2]);
-#println(lista[2][2]);
-#println(lista[3]);
-#println(lista[4]);
-
-#xasdf = lista[4];
-#println(xasdf.edad);
-
-#=println(lista[7][1]);
-println(lista[8]);
-
-xasdf = lista[9];
-println(xasdf.edad);=#
-
-#=
-arreglo = [["Hola", 2],3*3.23,1-23/32];
-testAcc = arreglo[0+4-4][3-2];
-print(testAcc, arreglo[0][0] ^ 3);
-
-arregloStr = [objTest, objCarro];
-
-println(objTest.edad);
-=#

@@ -30,7 +30,6 @@ class Asignacion(Expresion):
                     if objStruct.Mutable:
                         for attrSt in objStruct.Atributos:
                             if attrSt.ID == attr:
-                                print(attrSt.ID, attrSt.Tipo)
                                 if attrSt.TipoOrigen == "Any" or valorExp.Tipo == attrSt.Tipo:
                                     # Este valor se pasa por ref al simbolo
                                     attrSt.Valor = valorExp.Valor

@@ -7,6 +7,8 @@ from Models.Variables.Struct import *
 
 import Abstractos.Globales as Errores
 
+from copy import copy, deepcopy
+
 class Llamada(Expresion):
 
     def __init__(self, id, params, fila, columna):
@@ -23,7 +25,7 @@ class Llamada(Expresion):
             # Para structs
             if llamada.Tipo == "struct":
                 structBase = llamada.Valor
-                objeto = Struct("", structBase.Mutable, structBase.Atributos)
+                objeto = Struct(self.ID, structBase.Mutable, deepcopy(structBase.Atributos))
                 
                 for i in range(len(self.Params)):
                     valorParam = self.Params[i].execute(entorno)
