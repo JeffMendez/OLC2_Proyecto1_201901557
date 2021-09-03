@@ -49,8 +49,8 @@ class Print(Expresion):
                 objetoRef = item.execute(entorno)
 
                 if objetoRef.Tipo == "array": salida += Print.printArreglo(objetoRef, entorno)
-                elif objetoRef.Tipo == "struct": 
-                    salida += Print.printStruct(objetoRef, attr.Valor, entorno)
+                elif objetoRef.Tipo == "struct": salida += Print.printStruct(objetoRef, attr.Valor, entorno)
+            
             else:
                 # Array declarado dentro
                 if attr.Tipo == "array": salida += Print.printArreglo(attr,entorno)
@@ -75,7 +75,10 @@ class Print(Expresion):
                 elif objetoRef.Tipo == "struct": salida += Print.printStruct(objetoRef, item, entorno)
             else:
                 # Array declarado dentro
-                if item.Tipo == "array": salida += Print.printArreglo(item,entorno)
+                if item.Tipo == "array": 
+                    arrayValue = item.execute(entorno)
+                    salida += Print.printArreglo(arrayValue,entorno)
+                    
                 # Item por valor
                 else: salida += str(item.Valor)
 

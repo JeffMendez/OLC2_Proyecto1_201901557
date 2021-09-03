@@ -14,6 +14,7 @@ from Models.Variables.Asignacion import *
 from Models.Variables.Atributo import *
 from Models.Variables.Struct import *
 from Models.Variables.Arreglo import *
+from Models.Variables.Acceso import *
 
 from Models.Sentencias.If import *
 from Models.Sentencias.While import *
@@ -25,8 +26,6 @@ rw = {
     "true": "TRUE",
     "false": "FALSE",
     "nothing": "NOTHING",
-
-    "Evaluar": "REVALUAR",
 
     "println": "PRINTLN",
     "print": "PRINT",
@@ -298,7 +297,7 @@ def p_atributo(t):
 # ARREGLOS --------------------------------------------------------------
 def p_arreglo(t):
     '''arreglo  : CORIZQ paramExp CORDER
-                | expresion listaIndices'''
+                | ID listaIndices'''
     if len(t) == 4:
         t[0] = Arreglo(t[2], "declaracion", None, t.lineno(2), t.lexpos(2))
     else:
@@ -324,6 +323,28 @@ def p_rango(t):
                 | expresion DOSPUNTOS END
                 | BEGIN DOSPUNTOS END'''
     t[0] = Simbolo([t[1], t[3]], "Rango", None, t.lineno(1), t.lexpos(1))
+
+
+# ACCESO -------------------------------------------------------
+def p_acceso(t):
+    '''acceso   : acceso PUNTO acceso
+                | ID PUNTO ID
+                | arreglo PUNTO arreglo
+                | arreglo PUNTO ID
+                | ID PUNTO arreglo
+                | ID
+                | arreglo'''
+    
+    if len(t) == 2:
+        # Acceso singular
+        tipo = t.slice[1].type
+        if tipo == "arreglo":
+            t[0] = Acceso(t[1], None, "array", t.lineno(1), t.lexpos(1))
+        elif tipo == "ID":
+            t[0] = Acceso(t[1], None, "ID", t.lineno(1), t.lexpos(1))
+    else: 
+        # Acceso multiple
+        t[0] = Acceso(t[1], t[3], "mix", t.lineno(2), t.lexpos(2))
 
 # BLOQUE DE INSTRUCCIONES -----------------------------------------------
 def p_bloque(t):
@@ -434,11 +455,11 @@ def p_expresion_basica(t):
                     | TRUE
                     | FALSE
                     | NOTHING
-                    | ID PUNTO ID
-                    | ID
                     | rango
-                    | llamadaExp
-                    | arreglo'''
+                    | acceso
+                    | llamadaExp'''
+
+    #| ID PUNTO ID                    
 
     tipo = t.slice[1].type
 
@@ -452,15 +473,10 @@ def p_expresion_basica(t):
         t[0] = Simbolo(t[1], "Char", None, t.lineno(1), t.lexpos(1))
     elif tipo == "rango":
         t[0] = t[1]
-    elif tipo == "arreglo":
-        t[0] = t[1]
     elif tipo == "llamadaExp":
         t[0] = t[1]
-    elif tipo == "ID":
-        if len(t) > 2:
-            t[0] = Simbolo(t[3], "struct", t[1], t.lineno(1), t.lexpos(1))
-        else:
-            t[0] = Simbolo(t[1], "ID", t[1], t.lineno(1), t.lexpos(1))
+    elif tipo == "acceso":
+        t[0] = t[1]
     elif isinstance(t[1], str):
         value = str(t[1])
         if "true" in value:

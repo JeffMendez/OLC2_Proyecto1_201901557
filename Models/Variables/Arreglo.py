@@ -41,8 +41,9 @@ class Arreglo(Expresion):
             return Retorno(arrayIndices, "array")
 
         else:
-            accesoObj = self.Array.execute(entorno)
             
+            accesoObj = entorno.getSimbolo(self.Array) # Array seria el ID que viene (id[..][..] <- id)
+  
             if accesoObj.Tipo == "array":
                 # Verificar indices
                 indicesAcceso = []
@@ -60,8 +61,8 @@ class Arreglo(Expresion):
                     try:
                         objIndice = accesoObj.Valor[indiceActual-1]
   
-                        if objIndice.Tipo == "ID": 
-                            # Pasar ref structs y arreglos
+                        if objIndice.Tipo == "ID" or objIndice.Tipo == "array": 
+                            # Pasar ref structs y arreglos, tambien funciona para array declarado adentro
                             valorIndice = objIndice.execute(entorno)
                         else:
                             # Pasar valor

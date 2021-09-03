@@ -1,5 +1,5 @@
 mutable struct Objeto
-    nombre;
+    obj;
     edad::Int64;
     descripcion::String;
 end;
@@ -10,27 +10,33 @@ struct Carro
     color::String;
 end;
 
-arreglo = [1,2,3];
+cienes = [100,200];
+arreglo = [11,22,33,cienes];
 
-objAAAA = Objeto([2,3, arreglo], 21, "No");
+objAAAA = Objeto("Carlos", 21, "No");
 objTest = Objeto(objAAAA, 12, "Si");
 objComa = Objeto(objTest, 35, "No");
 
-araLes = [[1,2],true,arreglo,objComa];
+objAAAA.obj = "Pedro Sanchez"; #Ref
+araLes = [[1,2],arreglo,234,"a",objTest];
+xt = 5;
 
-arreglo = [3.12, 9, 8];
-
-objAAAA.edad = 100;
-objTest.edad = 200;
-objComa.edad = 300;
-
-ss = objAAAA.nombre;
-println(ss[3][2]);
-
-println(objAAAA.nombre);
-println(objTest);
-println(objComa);
+println("------Obj recursividad------");
 println(araLes);
+println(objComa);
+println("--------Obj normales--------");
+println(xt);
+println(objAAAA);
+println(arreglo);
+println("-------Print multiple------");
+println("Hola:", objComa.obj.edad);
+
+
+#println(araLes);
+
+#println(objTest);
+#println(objComa);
+#println(araLes);
 
 #println(objAAAA);
 
