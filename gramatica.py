@@ -335,16 +335,28 @@ def p_acceso(t):
                 | ID
                 | arreglo'''
     
-    if len(t) == 2:
-        # Acceso singular
-        tipo = t.slice[1].type
-        if tipo == "arreglo":
-            t[0] = Acceso(t[1], None, "array", t.lineno(1), t.lexpos(1))
-        elif tipo == "ID":
-            t[0] = Acceso(t[1], None, "ID", t.lineno(1), t.lexpos(1))
-    else: 
+    if t.slice[1].type == "acceso" and t.slice[3].type == "acceso":
         # Acceso multiple
-        t[0] = Acceso(t[1], t[3], "mix", t.lineno(2), t.lexpos(2))
+        t[0] = Acceso([t[1], t[3]], "mix", t.lineno(1), t.lexpos(1))
+  
+    else:
+        if len(t) == 2:
+            # Acceso singular
+            tipo = t.slice[1].type
+            if tipo == "arreglo":
+                t[0] = Acceso(t[1], "array", t.lineno(1), t.lexpos(1))
+            elif tipo == "ID":
+                t[0] = Acceso(t[1], "ID", t.lineno(1), t.lexpos(1))
+        else: 
+            # Acceso con atributo
+            tipoUno = "array" if t.slice[1].type == "arreglo" else "ID"
+            tipoDos = "array" if t.slice[3].type == "arreglo" else "ID"
+    
+            accUno = Acceso(t[1], tipoUno, t.lineno(1), t.lexpos(1))
+            accDos = Acceso(t[3], tipoDos, t.lineno(1), t.lexpos(1))
+
+            t[0] = Acceso([accUno, accDos], "mix", t.lineno(1), t.lexpos(1))
+
 
 # BLOQUE DE INSTRUCCIONES -----------------------------------------------
 def p_bloque(t):

@@ -10,14 +10,15 @@ struct Carro
     color::String;
 end;
 
-cienes = [100,200];
+cienes = [100,200,[99,88]];
 arreglo = [11,22,33,cienes];
 
-objAAAA = Objeto("Carlos", 21, "No");
+objAAAA = Objeto(cienes, 21, "No");
 objTest = Objeto(objAAAA, 12, "Si");
-objComa = Objeto(objTest, 35, "No");
+objComa = Objeto(cienes, 35, "No");
+objkk = [1.22,2.482, objComa];
+obj222 = [72,42,[32,objComa]];
 
-objAAAA.obj = "Pedro Sanchez"; #Ref
 araLes = [[1,2],arreglo,234,"a",objTest];
 xt = 5;
 
@@ -29,17 +30,9 @@ println(xt);
 println(objAAAA);
 println(arreglo);
 println("-------Print multiple------");
-println("Hola:", objComa.obj.edad);
+println("Structs-Arreglo:", objComa.obj[3][2]);
+println("Structs-ID-Arreglo:", objTest.obj.obj[1]);
+println("Arreglo-Struct:", objkk[3].obj[3][1]);
 
-
-#println(araLes);
-
-#println(objTest);
-#println(objComa);
-#println(araLes);
-
-#println(objAAAA);
-
-#println(objTest);
-#println(objComa);
-
+#objkk[3].obj[3][1] = 9888;
+#print(objkk[3].obj[3][1]);
