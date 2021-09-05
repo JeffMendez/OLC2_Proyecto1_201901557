@@ -58,6 +58,67 @@ class Llamada(Expresion):
                         return Retorno("ERROR", "struct")
 
                 return Retorno(objeto, "struct")
+
+            # Para funciones
+            elif llamada.Tipo == "funcion":
+                objFuncion = llamada.Valor
+
+                if self.Params == None and objFuncion.Parametros == None:
+                    objFuncion.Instrucciones.execute(entorno)
+                    if resultado == None: return Retorno(None, "Nulo")
+                    else:
+                        print("se beria retornar algo")
+                        return
+                else:
+                    if self.Params == None or objFuncion.Parametros == None or len(self.Params) != len(objFuncion.Parametros):
+                        Errores.tablaErrores.append(Error(f"Parametros no coinciden", self.Fila, self.Columna))
+                        return Retorno("ERROR", "indice")
+                    else:      
+
+                        entornoFuncion = Entorno(entorno, "")
+                        indiceParam = 0
+
+                        for paramExp in self.Params:
+                            exp = paramExp.execute(entorno)
+       
+                            if exp.Tipo == "struct" or exp.Tipo == "array":
+                                # Pasar ref
+                                # struct
+                                if exp.Tipo == "struct":
+                                    paramFuncion = objFuncion.Parametros[indiceParam]
+                                    if exp.Valor.ID == paramFuncion.IDTipo or paramFuncion.IDTipo == "Any":
+                                        entornoFuncion.setSimbolo(paramFuncion.IDParam, exp, "struct")
+                                        indiceParam += 1
+                                    else:
+                                        Errores.tablaErrores.append(Error(f"Tipos no coinciden", self.Fila, self.Columna))
+                                        return Retorno("ERROR", "indice")
+                                # array
+                                elif exp.Tipo == "array":
+                                    paramFuncion = objFuncion.Parametros[indiceParam]
+                                    if paramFuncion.IDTipo == "Any":
+                                        entornoFuncion.setSimbolo(paramFuncion.IDParam, exp, "array")
+                                        indiceParam += 1
+                                    else:
+                                        Errores.tablaErrores.append(Error(f"Tipos no coinciden", self.Fila, self.Columna))
+                                        return Retorno("ERROR", "indice")
+
+                            else:
+                                # Pasar valor
+                                paramFuncion = objFuncion.Parametros[indiceParam]
+                                if paramFuncion.IDTipo == exp.Tipo or paramFuncion.IDTipo == "Any":
+                                    entornoFuncion.setSimbolo(paramFuncion.IDParam, exp, exp.Tipo)
+                                    indiceParam += 1
+                                else:
+                                    Errores.tablaErrores.append(Error(f"Tipos no coinciden", self.Fila, self.Columna))
+                                    return Retorno("ERROR", "indice")
+
+                        # Ejecutar bloque funcion
+                        resultado = objFuncion.Instrucciones.execute(entornoFuncion)
+                        if resultado == None: return Retorno(None, "Nulo")
+                        else:
+                            print("se beria retornar algo")
+                            
+                
         else:
             Errores.tablaErrores.append(Error(f"La funcion o struct no existe: {self.ID}", self.Fila, self.Columna))
             return Retorno("ERROR", "llamada")

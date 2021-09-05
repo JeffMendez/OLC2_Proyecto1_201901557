@@ -25,7 +25,7 @@ class Print(Expresion):
                 elif valorExp.Tipo == "struct": salida += Print.printStruct(valorExp, exp, entorno)
                 elif valorExp.Tipo == "array": salida += Print.printArreglo(valorExp, entorno)
 
-                else: salida += str(valorExp.Valor) + " "
+                else: salida += str(valorExp.Valor)
     
         if not error:
             if self.Tipo == "nl": 

@@ -24,15 +24,29 @@ class For(Expresion):
         
         # Para string
         if valorExp.Tipo == "String":
+            # Declarar objeto
             indice = 0
             letra = Retorno(valorExp.Valor[indice], valorExp.Tipo)
- 
             entornoFor = Entorno(entorno, "")
             entornoFor.setSimbolo(self.Variable, letra, letra.Tipo)
-
+            
             while True:
-                # Servira para sentencias de transferencia
                 resultCorrida = self.Instrucciones.execute(entornoFor)
+                
+                # Sentencias de transferencia
+                if resultCorrida != None:
+                    if resultCorrida.Tipo == "continue":
+                        # Actualizar iterador
+                        iterador = entornoFor.getSimbolo(self.Variable)
+                        if indice < len(valorExp.Valor)-1:
+                            indice = indice + 1
+                            iterador.Valor = valorExp.Valor[indice]
+                        else: return
+                        continue
+                    elif resultCorrida.Tipo == "break":
+                        return
+                    else:
+                        print("retorno o alguna kk")
 
                 # Actualizar iterador
                 iterador = entornoFor.getSimbolo(self.Variable)
@@ -44,12 +58,40 @@ class For(Expresion):
         
         # Para arreglo
         if valorExp.Tipo == "array":
+            # Declarar objeto
             indice = 0
             item = valorExp.Valor[indice]
-            item = item.execute(entorno)
-            print(item)
-        # Para arreglo con rango
+            entornoFor = Entorno(entorno, "")
+            entornoFor.setSimbolo(self.Variable, item, item.Tipo)
+            
+            while True:
+                resultCorrida = self.Instrucciones.execute(entornoFor)
 
+                # Sentencias de transferencia
+                if resultCorrida != None:
+                    if resultCorrida.Tipo == "continue":
+                        # Actualizar iterador
+                        iterador = entornoFor.getSimbolo(self.Variable)
+                        if indice < len(valorExp.Valor)-1:
+                            indice = indice + 1
+                            iterador = valorExp.Valor[indice]
+                            entornoFor.setSimbolo(self.Variable, iterador, iterador.Tipo)          
+                        else: return
+                        continue
+                    elif resultCorrida.Tipo == "break":
+                        return
+                    else:
+                        print("retorno o alguna kk")
+
+                # Actualizar iterador
+                iterador = entornoFor.getSimbolo(self.Variable)
+                if indice < len(valorExp.Valor)-1:
+                    indice = indice + 1
+                    iterador = valorExp.Valor[indice]
+                    entornoFor.setSimbolo(self.Variable, iterador, iterador.Tipo)          
+                else:
+                    return
+            
         # Para rango
         if valorExp.Tipo == "Rango":
             inicio = valorExp.Valor[0]
@@ -74,9 +116,22 @@ class For(Expresion):
             entornoFor = Entorno(entorno, "")
             entornoFor.setSimbolo(self.Variable, inicio, inicio.Tipo)
 
-            while True:
-                # Servira para sentencias de transferencia
+            while True:    
                 resultCorrida = self.Instrucciones.execute(entornoFor)
+
+                # Sentencias de transferencia
+                if resultCorrida != None:
+                    if resultCorrida.Tipo == "continue":
+                        # Actualizar iterador
+                        iterador = entornoFor.getSimbolo(self.Variable)
+                        if iterador.Valor < fin.Valor:
+                            iterador.Valor = iterador.Valor + 1
+                        else: return
+                        continue
+                    elif resultCorrida.Tipo == "break":
+                        return
+                    else:
+                        print("retorno o alguna kk")
 
                 # Actualizar iterador
                 iterador = entornoFor.getSimbolo(self.Variable)

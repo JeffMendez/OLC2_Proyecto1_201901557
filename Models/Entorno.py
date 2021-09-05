@@ -40,6 +40,19 @@ class Entorno:
         # Setear si no esta agregado
         self.TablaSimbolos[id] = nuevoStruct
 
+    def setFuncion(self, id, funcion, fila, columna):
+        nuevaFuncion = Simbolo(funcion, "funcion", id)
+
+        entorno = self
+        # Verificar que no exista
+        while entorno != None:
+            if id in entorno.TablaSimbolos.keys():
+                Errores.tablaErrores.append(Error(f"Funcion ya declarada: {id}", fila, columna))
+                return
+            entorno = entorno.Padre
+        # Setear si no esta agregado
+        self.TablaSimbolos[id] = nuevaFuncion
+
     def getSimbolo(self, id):
         entorno = self
         while entorno != None:

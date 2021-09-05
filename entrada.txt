@@ -1,38 +1,125 @@
-mutable struct Objeto
-    obj;
-    edad::Int64;
-    descripcion::String;
+mutable struct Nodo
+    nodoHijo;
+    dato;
 end;
 
-struct Carro
-    marca;
-    km::Float64;
-    color::String;
+animales = ["perro","gato","tortuga","leon"];
+padre = Nodo(nothing, "juan");
+
+println(numeros);
+println(animales); 
+
+for i in 1:10
+    if i < 5
+        print(i, "<5 ");
+        continue;
+        print("aaa");
+    else
+        print(i, ">=5 ");
+        break;
+    end;
+    print("No debo salir");
 end;
 
-cienes = [100,200,[99,88]];
-arreglo = [11,22,33,cienes];
+println("");
 
-objAAAA = Objeto(cienes, 21, "No");
-objTest = Objeto(objAAAA, 12, "Si");
-objComa = Objeto(cienes, 35, "No");
-objkk = [1.22,2.482, objComa];
-obj222 = [72,42,[32,objComa]];
+for letra in "ooooaaaoooo!"
+    if letra == "o"
+        print(letra, "=o ");
+        continue;
+        print("aaa");
+    else
+        print(letra, "!=o ");
+        break;
+    end;
+    print("No debo salir");
+end;
 
-araLes = [[1,2],arreglo,234,"a",objTest];
-xt = 5;
+println("");
+cadena = "oooooaooo";
 
-println("------Obj recursividad------");
-println(araLes);
-println(objComa);
-println("--------Obj normales--------");
-println(xt);
-println(objAAAA);
-println(arreglo);
-println("-------Print multiple------");
-println("Structs-Arreglo:", objComa.obj[3][2]);
-println("Structs-ID-Arreglo:", objTest.obj.obj[1]);
-println("Arreglo-Struct:", objkk[3].obj[3][1]);
+for letra in cadena
+    if letra == "o"
+        print(letra, "=o ");
+        continue;
+        print("aaa");
+    else
+        print(letra, "!=o ");
+        break;
+    end;
+    print("No debo salir");
+end;
 
-#objkk[3].obj[3][1] = 9888;
-#print(objkk[3].obj[3][1]);
+println("");
+
+for dato in animales
+    if dato != "tortuga"
+        print(dato, "=aceptado ");
+        continue;
+        print("aaa");
+    else
+        print(dato, "=denegado ");
+        break;
+    end;
+    print("No debo salir");
+end;
+
+println("");
+
+for num in [9,8,7,6]
+    if num != 7
+        print(num, "=si ");
+        continue;
+        print("aaa");
+    else
+        print(num, "=no ");
+        break;
+    end;
+    print("No debo salir");
+end;
+
+println("");
+
+verdadero = true;
+cont = 4;
+while verdadero
+    cont = cont - 1;
+    print(cont, " ");
+    if cont == 0
+        break;
+    else
+        continue;
+        println("no debo salir");
+    end;
+    println("no debo salir");
+end;
+
+#= println("");
+
+anime = "God piece";
+carros = ["Honda", "Hyndai", "Toyota", "Lamborguini"];
+for car in carros[2:end]
+    print(car, "--");
+end;
+
+println("");
+println("----------Funciones--------------");
+
+function insert(obj::Nodo, arregloRef, variable)
+    variable = "Naruto";
+    obj.dato = "sancho";
+    arregloRef[1] = "Suzuki";
+
+    println(arregloRef);
+    println(obj);
+    println(variable);
+end;
+
+insert(padre, carros, anime);
+
+println("---------Cambio por Ref----------");
+println(padre);
+println(carros);
+println(anime);
+
+println(carros[1] == carros[2]); =#

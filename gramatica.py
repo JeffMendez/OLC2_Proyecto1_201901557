@@ -8,6 +8,8 @@ from Models.Simbolo import *
 from Models.Bloque import *
 from Models.Llamada import *
 
+from Models.Funciones.Funcion import *
+from Models.Funciones.ParamDecl import *
 from Models.Funciones.Print import *
 
 from Models.Variables.Asignacion import *
@@ -15,6 +17,7 @@ from Models.Variables.Atributo import *
 from Models.Variables.Struct import *
 from Models.Variables.Arreglo import *
 from Models.Variables.Acceso import *
+from Models.Variables.AccesoAsignacion import *
 
 from Models.Sentencias.If import *
 from Models.Sentencias.While import *
@@ -48,6 +51,12 @@ rw = {
 
     "for": "FOR",
     "in": "IN",
+
+    "break": "BREAK",
+    "continue": "CONTINUE",
+    "return": "RETURN",
+
+    "function" : "FUNCTION",
 
     "struct": "STRUCT",
     "mutable": "MUTABLE",
@@ -213,10 +222,16 @@ def p_instrucciones(t):
 def p_instruccion(t):
     '''instruccion  : printInst PTCOMA
                     | asignacion PTCOMA
+                    | accesoAsignacion PTCOMA
                     | structs PTCOMA
                     | ifInst PTCOMA
                     | whileInst PTCOMA
-                    | forInst PTCOMA'''
+                    | forInst PTCOMA
+                    | continueInst PTCOMA
+                    | breakInst PTCOMA
+                    | funcionDecl PTCOMA
+                    | llamadaExp PTCOMA
+                    | returnInst PTCOMA'''
     t[0] = t[1]
 
 # LLAMADAS -----------------------------------------------
@@ -237,6 +252,36 @@ def p_param_expresion(t):
         t[1].append(t[3])
         t[0] = t[1]
 
+# FUNCIONES --------------------------------------------------
+def p_funcion(t):
+    '''funcionDecl  : FUNCTION ID PARIZQ paramsDecl PARDER bloque END
+                    | FUNCTION ID PARIZQ PARDER bloque END'''
+    if len(t) == 7:
+        t[0] = Funcion(t[2], None, t[5], t.lineno(1), t.lexpos(1))
+    else:
+        t[0] = Funcion(t[2], t[4], t[6], t.lineno(1), t.lexpos(1))
+    
+def p_params_declaracion_list(t):
+    '''paramsDecl   : paramsDecl COMA paramDl
+                    | paramDl'''
+    if len(t) == 2:
+        t[0] = [t[1]]
+    else:
+        t[1].append(t[3])
+        t[0] = t[1]
+
+def p_param_declaracion(t):
+    '''paramDl  : ID DOSPUNTOS DOSPUNTOS ID
+                | ID'''
+    if len(t) == 2:
+        t[0] = ParamDecl(t[1], "Any", t.lineno(1), t.lexpos(1))
+    else:
+        t[0] = ParamDecl(t[1], t[4], t.lineno(1), t.lexpos(1))
+
+def p_returnInst(t):
+    'returnInst : RETURN expresion'
+    t[0] = Simbolo(t[2], "return", t.lineno(1), t.lexpos(1))
+
 # FUNCION PRINT -----------------------------------------------
 def p_instruccion_print(t):
     'printInst : PRINT PARIZQ paramExp PARDER'
@@ -249,15 +294,19 @@ def p_instruccion_println(t):
 # ASIGNACION -----------------------------------------------
 def p_asignacion(t):
     '''asignacion   : ID IGUAL expresion DOSPUNTOS DOSPUNTOS tipo
-                    | ID IGUAL expresion
-                    | ID PUNTO ID IGUAL expresion'''
-    
+                    | ID IGUAL expresion'''
     if len(t) == 4:
         t[0] = Asignacion(t[1], t[3], None, t.lineno(1), t.lexpos(1))
-    elif len(t) == 7:
-        t[0] = Asignacion(t[1], t[3], t[6], t.lineno(1), t.lexpos(1))
     else:
-        t[0] = Asignacion([t[1],t[3]], t[5], "struct", t.lineno(1), t.lexpos(1))
+        t[0] = Asignacion(t[1], t[3], t[6], t.lineno(1), t.lexpos(1))
+
+def p_accesoAsignacion(t):
+    '''accesoAsignacion : acceso IGUAL expresion DOSPUNTOS DOSPUNTOS tipo
+                        | acceso IGUAL expresion'''
+    if len(t) == 4:
+        t[0] = AccesoAsignacion(t[1], t[3], None, t.lineno(1), t.lexpos(1))
+    else:
+        t[0] = AccesoAsignacion(t[1], t[3], t[6], t.lineno(1), t.lexpos(1))
 
 def p_tipo(t):
     '''tipo : TINT64
@@ -395,6 +444,15 @@ def p_whileInst(t):
 def p_forInst(t):
     '''forInst    : FOR ID IN expresion bloque END'''
     t[0] = For(t[2], t[4], t[5], t.lineno(1), t.lexpos(0))
+
+# SENTENCIAS DE LOOPS
+def p_continueInst(t):
+    'continueInst : CONTINUE'
+    t[0] = Simbolo(None, "continue", t.lineno(1), t.lexpos(1))
+
+def p_breakInst(t):
+    'breakInst : BREAK '
+    t[0] = Simbolo(None, "break", t.lineno(1), t.lexpos(1))
 
 # EXPRESIONES -----------------------------------------------------
 def p_expresion_binaria(t):

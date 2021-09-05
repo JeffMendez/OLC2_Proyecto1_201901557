@@ -22,6 +22,14 @@ class While(Expresion):
             
             if valorCondicion.Valor:
                 resultCorrida = self.Instrucciones.execute(entorno)
-                # Servira para sentencias de transferencia
+
+                # Sentencias de transferencia
+                if resultCorrida != None:
+                    if resultCorrida.Tipo == "continue":
+                        continue
+                    elif resultCorrida.Tipo == "break":
+                        return
+                    else:
+                        print("retorno o alguna kk")
             else:
                 return

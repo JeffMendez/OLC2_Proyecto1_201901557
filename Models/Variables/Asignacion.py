@@ -18,38 +18,6 @@ class Asignacion(Expresion):
 
         if valorExp.Valor != "ERROR":
 
-            # Para structs
-            if self.Tipo == "struct":
-                idStruct = self.ID[0]
-                attr = self.ID[1]
-
-                simbolo = entorno.getSimbolo(idStruct)
-                
-                if simbolo != None:
-                    objStruct = simbolo.Valor
-                    if objStruct.Mutable:
-                        for attrSt in objStruct.Atributos:
-                            if attrSt.ID == attr:
-                                if attrSt.TipoOrigen == "Any" or valorExp.Tipo == attrSt.Tipo:
-                                    # Este valor se pasa por ref al simbolo
-                                    attrSt.Valor = valorExp.Valor
-                                    attrSt.Tipo = valorExp.Tipo
-                                else:
-                                    # Tipo no coincide
-                                    Errores.tablaErrores.append(Error(f"El tipo del atributo no coincide: {attrSt.Tipo} con {valorExp.Tipo}", self.Fila, self.Columna))
-                                return
-                        # Attr no existe
-                        Errores.tablaErrores.append(Error(f"El atributo no existe: {attr}", self.Fila, self.Columna))
-                        return
-                    else:
-                        # Inmutable
-                        Errores.tablaErrores.append(Error(f"Struct {idStruct} inmutable, cambio rechazado", self.Fila, self.Columna))
-                        return         
-                else:
-                    # No Existe
-                    Errores.tablaErrores.append(Error(f"El objeto struct {idStruct} no existe", self.Fila, self.Columna))
-                return
-
             # Para variables, arreglos - Verificar tipo si viene
             if self.Tipo != None:
                 if valorExp.Tipo != self.Tipo:

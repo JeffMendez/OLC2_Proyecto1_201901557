@@ -6,12 +6,11 @@ import Abstractos.Globales as Errores
 
 class Acceso(Expresion):
 
-    def __init__(self, objeto, tipo, fila, columna, objAnterior = None):
+    def __init__(self, objeto, tipo, fila, columna):
         self.Objeto = objeto
         self.Tipo = tipo
         self.Fila = fila
         self.Columna = columna
-        self.ObjAnterior = objAnterior # Si es necesario tener: este -> |id|.attr  
 
     def execute(self, entorno):
         
@@ -19,7 +18,7 @@ class Acceso(Expresion):
             # Acceso singular - id
             simbolo = entorno.getSimbolo(self.Objeto)
             if simbolo == None:
-                Errores.tablaErrores.append(Error(f"No existe la variable: {self.Objeto}", self.Fila, self.Columna))
+                #Errores.tablaErrores.append(Error(f"No existe la variable: {self.Objeto}", self.Fila, self.Columna))
                 return Retorno("ERROR", "Variable")
             return Retorno(simbolo.Valor, simbolo.Tipo)
 
@@ -71,30 +70,50 @@ class Acceso(Expresion):
         indicesAcceso = []
         for indice in array.Indices:
             exp = indice.execute(entorno)
-            if exp.Valor == "ERROR" or exp.Tipo != "Int64" or exp.Valor == 0:
-                Errores.tablaErrores.append(Error(f"El indice no es Int64, es 0 o antecede un error", array.Fila, array.Columna))
+            
+            if exp.Valor == "ERROR" or (exp.Tipo != "Int64" and exp.Tipo != "Rango") or exp.Valor == 0:
+                Errores.tablaErrores.append(Error(f"El indice no es Int64 ni Rango, es 0 o antecede un error", array.Fila, array.Columna))
                 return Retorno("ERROR", "indice")
             else:
                 indicesAcceso.append(exp.Valor)
 
         valorIndice = None
         while len(indicesAcceso) > 0: # Iterar hasta completar los indices
-            indiceActual = indicesAcceso[0]
-            try:
-                objIndice = simbolo.Valor[indiceActual-1]
+            indiceActual = indicesAcceso[0]   
 
-                if objIndice.Tipo == "ID" or objIndice.Tipo == "array": 
-                    # Pasar ref structs y arreglos, tambien funciona para array declarado adentro
-                    valorIndice = objIndice.execute(entorno)
-                else:
-                    # Pasar valor
-                    valorIndice = objIndice
+            if isinstance(indiceActual, list):
+                # Acceso rango [2:4]
+                inicio = indiceActual[0]
+                fin = indiceActual[1]
+
+                if inicio != 'begin' and inicio != 'end': 
+                    inicio = inicio.execute(entorno)
+                    inicio.Valor -= 1
+                else: inicio = Retorno(0, 'Int64')
+
+                if fin != 'begin' and fin != 'end' : 
+                    fin = fin.execute(entorno)
+                else: fin = Retorno(len(simbolo.Valor), 'Int64')
                 
-                del indicesAcceso[0] # Borra el indice ya procesado
-                simbolo = valorIndice # Nuevo valor a iterar
-            except:
-                Errores.tablaErrores.append(Error(f"Error al acceder al indice", self.Fila, self.Columna))
-                return Retorno("ERROR", "indice")
+                valorIndice = simbolo.Valor[inicio.Valor:fin.Valor]
+                return Retorno(valorIndice, "array")
+            else:
+                # Acceso numerico [3]
+                try:
+                    objIndice = simbolo.Valor[indiceActual-1]
+
+                    if objIndice.Tipo == "ID" or objIndice.Tipo == "array": 
+                        # Pasar ref structs y arreglos, tambien funciona para array declarado adentro
+                        valorIndice = objIndice.execute(entorno)
+                    else:
+                        # Pasar valor
+                        valorIndice = objIndice
+                    
+                    del indicesAcceso[0] # Borra el indice ya procesado
+                    simbolo = valorIndice # Nuevo valor a iterar
+                except:
+                    Errores.tablaErrores.append(Error(f"Error al acceder al indice", array.Fila, array.Columna))
+                    return Retorno("ERROR", "indice")
 
         return Retorno(valorIndice.Valor, valorIndice.Tipo)
 
