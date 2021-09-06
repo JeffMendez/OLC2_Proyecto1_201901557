@@ -1,9 +1,9 @@
 from gramatica import parse
 from Models.Entorno import *
 
-import Abstractos.Globales as Errores
+import Abstractos.Globales as Globales
 
-Errores.inicializar()
+Globales.inicializar()
 
 ast = parse()
 entornoGlobal = Entorno(None, "global")
@@ -11,13 +11,12 @@ entornoGlobal = Entorno(None, "global")
 try:
     for instruccion in ast:
         valor = instruccion.execute(entornoGlobal)
-        if valor != None:
-            print(valor)
-            if valor.Tipo == "return" or valor.Tipo == "continue" or valor.Tipo == "break":
-                print("aaaaaaaaaaaaaaaaaaa")
+
+    # Imprimir salidas
+    print(Globales.salidaPrints)
 
     # Imprimir errores
-    for error in Errores.tablaErrores:
+    for error in Globales.tablaErrores:
         print(error.Mensaje, f"({error.Fila}:{error.Columna})")
 
 except Exception as e:

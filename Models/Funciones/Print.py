@@ -1,4 +1,5 @@
 from Abstractos.Expresion import *
+import Abstractos.Globales as Globales
 
 class Print(Expresion):
 
@@ -30,14 +31,15 @@ class Print(Expresion):
         if not error:
             if self.Tipo == "nl": 
                 # Nueva linea
-                print(salida)  
+                #print(salida)
+                Globales.salidaPrints += salida + "\n"  
             else:
                 # Misma linea
-                print(salida, end="")
+                #print(salida, end="")
+                Globales.salidaPrints += salida
+               
 
     def printStruct(objeto, simbolo, entorno = None):
-        #print(objeto.Valor, simbolo.Valor, "1111")
-
         objStruct = objeto.Valor
         
         salida = objStruct.ID + "("
