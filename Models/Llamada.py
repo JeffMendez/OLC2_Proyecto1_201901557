@@ -115,8 +115,7 @@ class Llamada(Expresion):
                         # Ejecutar bloque funcion
                         resultado = objFuncion.Instrucciones.execute(entornoFuncion)
                         if resultado == None: return Retorno(None, "Nulo")
-                        else:
-                            print("se beria retornar algo")
+                        else: return resultado
                             
                 
         else:

@@ -11,6 +11,10 @@ entornoGlobal = Entorno(None, "global")
 try:
     for instruccion in ast:
         valor = instruccion.execute(entornoGlobal)
+        if valor != None:
+            print(valor)
+            if valor.Tipo == "return" or valor.Tipo == "continue" or valor.Tipo == "break":
+                print("aaaaaaaaaaaaaaaaaaa")
 
     # Imprimir errores
     for error in Errores.tablaErrores:

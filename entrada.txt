@@ -94,7 +94,7 @@ while verdadero
     println("no debo salir");
 end;
 
-#= println("");
+println("");
 
 anime = "God piece";
 carros = ["Honda", "Hyndai", "Toyota", "Lamborguini"];
@@ -110,16 +110,19 @@ function insert(obj::Nodo, arregloRef, variable)
     obj.dato = "sancho";
     arregloRef[1] = "Suzuki";
 
-    println(arregloRef);
-    println(obj);
-    println(variable);
+    return obj;
 end;
 
-insert(padre, carros, anime);
+numX = insert(padre, carros, anime);
 
 println("---------Cambio por Ref----------");
 println(padre);
 println(carros);
 println(anime);
+println(numX.dato);
 
-println(carros[1] == carros[2]); =#
+
+for x in 1:3
+    print(x);
+    return x;
+end;

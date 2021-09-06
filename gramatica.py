@@ -314,7 +314,8 @@ def p_tipo(t):
             | TSTRING
             | TBOOL
             | TCHAR
-            | TNULO'''
+            | TNULO
+            | ID'''
     t[0] = t[1]
 
 # STRUCTS -----------------------------------------------

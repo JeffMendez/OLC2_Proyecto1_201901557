@@ -45,9 +45,9 @@ class For(Expresion):
                         continue
                     elif resultCorrida.Tipo == "break":
                         return
-                    else:
-                        print("retorno o alguna kk")
-
+                    elif resultCorrida.Tipo == "return":
+                        return resultCorrida
+                        
                 # Actualizar iterador
                 iterador = entornoFor.getSimbolo(self.Variable)
                 if indice < len(valorExp.Valor)-1:
@@ -80,8 +80,8 @@ class For(Expresion):
                         continue
                     elif resultCorrida.Tipo == "break":
                         return
-                    else:
-                        print("retorno o alguna kk")
+                    elif resultCorrida.Tipo == "return":
+                        return resultCorrida
 
                 # Actualizar iterador
                 iterador = entornoFor.getSimbolo(self.Variable)
@@ -130,8 +130,8 @@ class For(Expresion):
                         continue
                     elif resultCorrida.Tipo == "break":
                         return
-                    else:
-                        print("retorno o alguna kk")
+                    elif resultCorrida.Tipo == "return":
+                        return resultCorrida
 
                 # Actualizar iterador
                 iterador = entornoFor.getSimbolo(self.Variable)

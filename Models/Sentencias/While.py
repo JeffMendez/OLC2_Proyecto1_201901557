@@ -29,7 +29,7 @@ class While(Expresion):
                         continue
                     elif resultCorrida.Tipo == "break":
                         return
-                    else:
-                        print("retorno o alguna kk")
+                    elif resultCorrida.Tipo == "return":
+                        return resultCorrida
             else:
                 return

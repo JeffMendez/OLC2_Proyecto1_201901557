@@ -48,5 +48,9 @@ class Simbolo(Expresion):
             Errores.tablaErrores.append(Error(f"Atributo no existe", self.Fila, self.Columna))
             return Retorno("ERROR", "Atributo")
 
+        elif self.Tipo == "return":
+            expResult = self.Valor.execute(entorno)
+            return Retorno(expResult.Valor, expResult.Tipo)
+
         return Retorno(self.Valor, self.Tipo)
 
