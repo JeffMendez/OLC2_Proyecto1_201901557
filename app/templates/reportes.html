@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>JOLC - 201901557</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+        <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    </head>
+<body style="overflow: auto;">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" style="opacity: 0.3;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">JOLC</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/analisis">Análisis</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/reportes">Reportes</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <br/><br/><br/>
+    <div class="row" style="text-align: center;">
+        <div class="col">
+            <button type="button" id="btnErrores" class="btn btn-outline-danger">Errores</button>
+        </div>
+ 
+        <div class="col">
+            <button type="button" id="btnSimbolos" class="btn btn-outline-success">Tabla de simbolos</button>
+        </div>
+
+        <div class="col">
+            <button type="button" id="btnAST" class="btn btn-outline-primary">AST</button>
+        </div>
+    </div>
+    <div style="padding: 50px; display: none;" id="tablaErrores">
+        <table class="table" style="color: white;">
+            <thead>
+            <tr>
+                <th scope="col">Descripción</th>
+                <th scope="col">Línea</th>
+                <th scope="col">Columna</th>
+                <th scope="col">Fecha y hora</th>
+            </tr>
+            </thead>
+            <tbody id="bodyErrores"></tbody>
+        </table>
+    </div>
+    <div style="padding: 50px; display: none;" id="tablaSimbolos">
+        <table class="table" style="color: white;">
+            <thead>
+            <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">Fila</th>
+                <th scope="col">Columna</th>
+            </tr>
+            </thead>
+            <tbody id="bodySimbolos"></tbody>
+        </table>
+    </div>
+    <br><br>
+    <div class="imgDiv" style="display: none;" id="imgAST">
+        <img src="{{ url_for('static', filename='ASTDOT.gv.png') }}">
+    </div>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script>
+        dataRes = null;
+
+        $(function(){
+            $('button#btnErrores').on('click', function(e) { 
+                $.ajax({
+                    type: 'GET',
+                    url: '/getDataRes',
+                    success: function(data) {
+                        res = JSON.parse(data.msg);
+                        console.log(res);
+                        errores = JSON.parse(res.tablaErrores);
+                        
+                        htmlFilas = "";
+                        for (error of errores) {
+                            htmlFilas += `<tr><th>${error.Mensaje}</th><td>${error.Fila}</td><td>${error.Columna}</td><td>${error.Fecha}</td></tr>`
+                        } 
+
+                        $("#tablaErrores").show();
+                        $("#tablaSimbolos").hide();
+                        $("#imgAST").hide();
+
+                        bodyErrores = document.getElementById("bodyErrores");
+                        bodyErrores.innerHTML = htmlFilas;
+
+                        console.log(errores);
+                    },
+                    contentType: 'application/json',
+                    dataType: 'json'
+                });
+            });
+
+            $('button#btnSimbolos').on('click', function(e) { 
+                $.ajax({
+                    type: 'GET',
+                    url: '/getDataRes',
+                    success: function(data) {
+                        res = JSON.parse(data.msg);
+                        simbolos = res.tablaSimbolos;
+                        
+                        htmlFilas = "";
+                        for (simbolo of simbolos) {
+                            htmlFilas += `<tr><th>${simbolo.ID}</th><td>${simbolo.Tipo}</td><td>${simbolo.Fila}</td><td>${simbolo.Columna}</td></tr>`
+                        } 
+
+                        $("#tablaSimbolos").show();
+                        $("#tablaErrores").hide();
+                        $("#imgAST").hide();
+                        
+                        bodySimbolos = document.getElementById("bodySimbolos");
+                        bodySimbolos.innerHTML = htmlFilas;
+
+                        console.log(simbolos);
+                    },
+                    contentType: 'application/json',
+                    dataType: 'json'
+                });
+            });
+
+            $('button#btnAST').on('click', function(e) { 
+                $("#tablaSimbolos").hide();
+                $("#tablaErrores").hide();
+                $("#imgAST").show();
+            });
+        })
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+</body>
+</html>
